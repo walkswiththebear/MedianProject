@@ -450,6 +450,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_fi
 {
 
     run_no_duplicates_fixed_length_test(len);
+    run_fixed_length_test_with_duplicates(len, - 2 * len, 2 * len);
     run_fixed_length_test_with_duplicates(len, -len / 2, len / 2);
     run_fixed_length_test_with_duplicates(len, -len / 5, len / 5);
     run_fixed_length_test_with_duplicates(len, 0, len / 10);
@@ -472,13 +473,28 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_no
     // average complexity results.
     no_op_median_performance_stats unused_stats;
     verify_median(sequence.cbegin(), sequence.cend(), unused_stats);
+    run_a_few_shuffles(sequence.begin(), sequence.end());
 
-    // Shuffle, check median, and keep track of performance stats
+    // Fill vector with a "skewed uniform" distribution, shuffle,
+    // check median, and keep track of performance stats
     //
     std::cout << "  " << len << " elements, no duplicates, " << m_monte_carlo_count << "  times.\n" << std::flush;
     performance_stats stats = performance_stats();
+    std::random_device random_device;
+    std::mt19937 generator(random_device());
+    std::uniform_int_distribution<> uniform_distribution(1, 1000);
     for (int i = 0; i < m_monte_carlo_count; ++i)
     {
+        std::vector<double> sequence(len);
+        double previous_elem = 0.0;
+        double count = 0.0;
+        for (double &elem : sequence)
+        {
+            elem = previous_elem + count + static_cast<double>(uniform_distribution(generator));
+            previous_elem = elem;
+            ++count;
+        }
+
         std::random_shuffle(sequence.begin(), sequence.end());
         verify_median(sequence.cbegin(), sequence.cend(), stats);
     }
