@@ -4,6 +4,7 @@
 #pragma once
 #include <cmath>
 #include "read_only_non_numerical_quick_median.hpp"
+#include "read_only_numerical_quick_median.hpp"
 using namespace tmb_algorithms;
 
 /*
@@ -22,6 +23,7 @@ class read_only_quick_median_regression_tests_and_performance_measurement
      *
      * read_only_non_numerical_quick_median
      * read_only_non_numerical_quick_median_random_data
+     * read_only_numerical_quick_median
 
      * For each of these algorithms, the following tests are run:
      *
@@ -42,53 +44,95 @@ class read_only_quick_median_regression_tests_and_performance_measurement
       */
     class performance_stats
     {
-
         template <typename Iterator, typename PivotingsStrategy, typename PerformanceStats>
         friend typename std::pair<Iterator, Iterator>
-        detail::read_only_non_numerical_quick_median_internal(Iterator begin,
-                                                              Iterator end,
-                                                              PivotingsStrategy pivoting_strategy,
-                                                              PerformanceStats &performance_stats);
+        read_only_non_numerical_quick_median_detail::read_only_non_numerical_quick_median_internal(
+            Iterator begin,
+            Iterator end,
+            PivotingsStrategy pivoting_strategy,
+            PerformanceStats &performance_stats);
+
+        template <typename Iterator, typename PerformanceStats>
+        friend double read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
+            Iterator begin,
+            Iterator end,
+            PerformanceStats &performance_stats);
+
+        template <typename Iterator, typename PerformanceStats>
+        friend std::tuple<double, double, int>
+        read_only_numerical_quick_median_detail::get_initial_sequence_data(Iterator begin,
+                                                                           Iterator end,
+                                                                           PerformanceStats performance_stats);
+
+        template <typename Iterator, typename PerformanceStats>
+        friend std::tuple<Iterator, int, int> read_only_non_numerical_quick_median_detail::trim_sequence_left(
+            Iterator active_sequence_begin,
+            bool median_lower_bound_found,
+            typename std::iterator_traits<Iterator>::value_type median_lower_bound,
+            bool median_upper_bound_found,
+            typename std::iterator_traits<Iterator>::value_type median_upper_bound,
+            PerformanceStats &performance_stats);
 
         template <typename Iterator, typename PerformanceStats>
         friend std::tuple<Iterator, int, int>
-        detail::trim_sequence_left(Iterator active_sequence_begin,
-                                   bool median_lower_bound_found,
-                                   typename std::iterator_traits<Iterator>::value_type median_lower_bound,
-                                   bool median_upper_bound_found,
-                                   typename std::iterator_traits<Iterator>::value_type median_upper_bound,
-                                   PerformanceStats &performance_stats);
+        read_only_numerical_quick_median_detail::trim_sequence_left(Iterator active_sequence_begin,
+                                                                    double median_lower_bound,
+                                                                    double median_upper_bound,
+                                                                    PerformanceStats &performance_stats);
+
+        template <typename Iterator, typename PerformanceStats>
+        friend std::tuple<Iterator, int, int> read_only_non_numerical_quick_median_detail::trim_sequence_right(
+            Iterator active_sequence_end,
+            bool median_lower_bound_found,
+            typename std::iterator_traits<Iterator>::value_type median_lower_bound,
+            bool median_upper_bound_found,
+            typename std::iterator_traits<Iterator>::value_type median_upper_bound,
+            PerformanceStats &performance_stats,
+            std::forward_iterator_tag);
 
         template <typename Iterator, typename PerformanceStats>
         friend std::tuple<Iterator, int, int>
-        detail::trim_sequence_right(Iterator active_sequence_end,
-                                    bool median_lower_bound_found,
-                                    typename std::iterator_traits<Iterator>::value_type median_lower_bound,
-                                    bool median_upper_bound_found,
-                                    typename std::iterator_traits<Iterator>::value_type median_upper_bound,
-                                    PerformanceStats &performance_stats,
-                                    std::forward_iterator_tag);
+        read_only_numerical_quick_median_detail::trim_sequence_right(Iterator active_sequence_end,
+                                                                     double median_lower_bound,
+                                                                     double median_upper_bound,
+                                                                     PerformanceStats &performance_stats,
+                                                                     std::forward_iterator_tag);
+
+        template <typename Iterator, typename PerformanceStats>
+        friend std::tuple<Iterator, int, int> read_only_non_numerical_quick_median_detail::trim_sequence_right(
+            Iterator active_sequence_end,
+            bool median_lower_bound_found,
+            typename std::iterator_traits<Iterator>::value_type median_lower_bound,
+            bool median_upper_bound_found,
+            typename std::iterator_traits<Iterator>::value_type median_upper_bound,
+            PerformanceStats &performance_stats,
+            std::bidirectional_iterator_tag);
 
         template <typename Iterator, typename PerformanceStats>
         friend std::tuple<Iterator, int, int>
-        detail::trim_sequence_right(Iterator active_sequence_end,
-                                    bool median_lower_bound_found,
-                                    typename std::iterator_traits<Iterator>::value_type median_lower_bound,
-                                    bool median_upper_bound_found,
-                                    typename std::iterator_traits<Iterator>::value_type median_upper_bound,
-                                    PerformanceStats &performance_stats,
-                                    std::bidirectional_iterator_tag);
+        read_only_numerical_quick_median_detail::trim_sequence_right(Iterator active_sequence_end,
+                                                                     double median_lower_bound,
+                                                                     double median_upper_bound,
+                                                                     PerformanceStats &performance_stats,
+                                                                     std::bidirectional_iterator_tag);
 
-        friend class detail::standard_pivoting_strategy;
+        friend class read_only_non_numerical_quick_median_detail::standard_pivoting_strategy;
 
-        friend class detail::pivoting_strategy_for_random_data;
+        friend class read_only_non_numerical_quick_median_detail::pivoting_strategy_for_random_data;
 
         template <typename Iterator, typename PerformanceStats>
-        friend std::tuple<int, int, int>
-        detail::count_elements(Iterator begin,
-                               Iterator end,
-                               typename std::iterator_traits<Iterator>::value_type compare_to_element,
-                               PerformanceStats &performance_stats);
+        friend std::tuple<int, int, int> read_only_non_numerical_quick_median_detail::count_elements(
+            Iterator begin,
+            Iterator end,
+            typename std::iterator_traits<Iterator>::value_type compare_to_element,
+            PerformanceStats &performance_stats);
+
+        template <typename Iterator, typename PerformanceStats>
+        friend std::tuple<int, int, int, double, double>
+        read_only_numerical_quick_median_detail::count_elements(Iterator begin,
+                                                                Iterator end,
+                                                                double compare_to_element,
+                                                                PerformanceStats &performance_stats);
 
       public:
         performance_stats()
@@ -165,7 +209,7 @@ class read_only_quick_median_regression_tests_and_performance_measurement
     template <typename Iterator, typename PerformanceStats>
     static void verify_median(Iterator begin, Iterator end, PerformanceStats &performance_stats);
     static void check_true(bool cond);
-    
+
     // Static member variables
     static int m_check_true_count;
     static int m_monte_carlo_count;

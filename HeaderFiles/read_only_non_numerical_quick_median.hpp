@@ -36,12 +36,13 @@
  * not random access. The performance of the second version does not vary significantly
  * for different iterator categories.
  *
- * A brief description of the algorithm can be found at lines 457 - 475 of the implementation
+ * A brief description of the algorithm can be found at lines 438 - 456 of the implementation
  * file "read_only_non_numerical_quick_median_detail.hpp". There will soon be an article
  * on my personal web site with more details about background, context, existing work, etc.
  */
 
 #include "read_only_non_numerical_quick_median_detail.hpp"
+#include "no_op_median_performance_stats.hpp"
 
 namespace tmb_algorithms
 {
@@ -62,9 +63,9 @@ namespace tmb_algorithms
 template <typename Iterator>
 std::pair<Iterator, Iterator> read_only_non_numerical_quick_median(Iterator begin, Iterator end)
 {
-    detail::no_op_performance_stats performance_stats;
-    return detail::read_only_non_numerical_quick_median_internal(
-        begin, end, detail::standard_pivoting_strategy(), performance_stats);
+    no_op_median_performance_stats::no_op_performance_stats performance_stats;
+    return read_only_non_numerical_quick_median_detail::read_only_non_numerical_quick_median_internal(
+        begin, end, read_only_non_numerical_quick_median_detail::standard_pivoting_strategy(), performance_stats);
 }
 
 /*
@@ -85,10 +86,13 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median(Iterator begi
 template <typename Iterator>
 std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_random_data(Iterator begin, Iterator end)
 {
-    detail::no_op_performance_stats performance_stats;
-    return detail::read_only_non_numerical_quick_median_internal(
-        begin, end, detail::pivoting_strategy_for_random_data(), performance_stats);
+    no_op_median_performance_stats::no_op_performance_stats performance_stats;
+    return read_only_non_numerical_quick_median_detail::read_only_non_numerical_quick_median_internal(
+        begin,
+        end,
+        read_only_non_numerical_quick_median_detail::pivoting_strategy_for_random_data(),
+        performance_stats);
 }
 } // end namespace tmb_algorithms
 
-#endif // READ_ONLY_NTH_ELEMENT_ALGORITHMS_07_21_2015_TMB_HPP
+#endif // TMB_READ_ONLY_NON_NUMERICAL_QUICK_MEDIAN_07_21_2015_HPP

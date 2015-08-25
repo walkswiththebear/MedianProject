@@ -20,7 +20,7 @@
 
 namespace tmb_algorithms
 {
-namespace detail
+namespace read_only_non_numerical_quick_median_detail
 {
 
 /*
@@ -352,72 +352,6 @@ std::tuple<int, int, int> count_elements(Iterator begin,
 }
 
 /*
-* No-op performance stats class, to be used as the default in the algorithm.
-*/
-class no_op_performance_stats
-{
-    template <typename Iterator, typename PivotingsStrategy, typename PerformanceStats>
-    friend typename std::pair<Iterator, Iterator>
-    read_only_non_numerical_quick_median_internal(Iterator begin,
-                                                  Iterator end,
-                                                  PivotingsStrategy pivoting_strategy,
-                                                  PerformanceStats &performance_stats);
-
-    template <typename Iterator, typename PerformanceStats>
-    friend std::tuple<Iterator, int, int>
-    trim_sequence_left(Iterator active_sequence_begin,
-                       bool median_lower_bound_found,
-                       typename std::iterator_traits<Iterator>::value_type median_lower_bound,
-                       bool median_upper_bound_found,
-                       typename std::iterator_traits<Iterator>::value_type median_upper_bound,
-                       PerformanceStats &performance_stats);
-
-    template <typename Iterator, typename PerformanceStats>
-    friend std::tuple<Iterator, int, int>
-    trim_sequence_right(Iterator active_sequence_end,
-                        bool median_lower_bound_found,
-                        typename std::iterator_traits<Iterator>::value_type median_lower_bound,
-                        bool median_upper_bound_found,
-                        typename std::iterator_traits<Iterator>::value_type median_upper_bound,
-                        PerformanceStats &performance_stats,
-                        std::forward_iterator_tag);
-
-    template <typename Iterator, typename PerformanceStats>
-    friend std::tuple<Iterator, int, int>
-    trim_sequence_right(Iterator active_sequence_end,
-                        bool median_lower_bound_found,
-                        typename std::iterator_traits<Iterator>::value_type median_lower_bound,
-                        bool median_upper_bound_found,
-                        typename std::iterator_traits<Iterator>::value_type median_upper_bound,
-                        PerformanceStats &performance_stats,
-                        std::bidirectional_iterator_tag);
-
-    friend class standard_pivoting_strategy;
-
-    friend class pivoting_strategy_for_random_data;
-
-    template <typename Iterator, typename PerformanceStats>
-    friend std::tuple<int, int, int> count_elements(Iterator begin,
-                                                    Iterator end,
-                                                    typename std::iterator_traits<Iterator>::value_type pivot,
-                                                    PerformanceStats &performance_stats);
-
-  private:
-    void set_sequence_length(int len)
-    {
-    }
-    void increment_pivot_count()
-    {
-    }
-    void add_comparisons(int comps)
-    {
-    }
-    void update_averages()
-    {
-    }
-};
-
-/*
 * The functions read_only_non_numerical_quick_median and
 * read_only_non_numerical_quick_median_random_data forward to this "internal"
 * function.
@@ -535,7 +469,7 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_internal(Iter
                                                typename std::iterator_traits<Iterator>::iterator_category());
         //
         std::tuple<int, int, int> element_counts =
-            detail::count_elements(active_sequence_begin, active_sequence_end, *pivot_pos, performance_stats);
+            count_elements(active_sequence_begin, active_sequence_end, *pivot_pos, performance_stats);
         //
         int num_elements_less_than_pivot =
             std::get<0>(element_counts) + num_discarded_elements_less_than_or_equal_to_median_lower_bound;
@@ -639,7 +573,7 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_internal(Iter
     performance_stats.update_averages();
     return median_pos_pair;
 }
-} // end namespace detail
-} // end namespace tmb_read_only_nth_element_algorithms
+} // end namespace read_only_non_numerical_quick_median_detail
+} // end namespace tmb_algorithms
 
-#endif // READ_ONLY_NTH_ELEMENT_ALGORITHMS_07_21_2015_TMB_HPP
+#endif // TMB_READ_ONLY_NON_NUMERICAL_QUICK_MEDIAN_DETAIL_07_21_2015_HPP
