@@ -42,12 +42,13 @@ trim_sequence_left(Iterator active_sequence_begin,
         }
         else if (median_upper_bound_found && *active_sequence_begin >= median_upper_bound)
         {
-            performance_stats.add_comparisons(1);
+            performance_stats.add_comparisons(2);
             ++num_discarded_elements_greater_than_or_equal_to_median_upper_bound;
             ++active_sequence_begin;
         }
         else
         {
+            performance_stats.add_comparisons(2);
             break;
         }
     }
@@ -99,12 +100,13 @@ trim_sequence_right(Iterator active_sequence_end,
         }
         else if (median_upper_bound_found && *active_sequence_last >= median_upper_bound)
         {
-            performance_stats.add_comparisons(1);
+            performance_stats.add_comparisons(2);
             ++num_discarded_elements_greater_than_or_equal_to_median_upper_bound;
             --active_sequence_last;
         }
         else
         {
+            performance_stats.add_comparisons(2);
             break;
         }
     }
@@ -181,6 +183,7 @@ class standard_pivoting_strategy
             }
             else
             {
+                performance_stats.add_comparisons(2);
                 return pivot_position_1;
             }
 
@@ -192,6 +195,7 @@ class standard_pivoting_strategy
             }
             else
             {
+                performance_stats.add_comparisons(2);
                 return pivot_position_2;
             }
         }
@@ -342,7 +346,7 @@ std::tuple<int, int, int> count_elements(Iterator begin,
     }
 
     performance_stats.increment_pivot_count();
-    performance_stats.add_comparisons(less_than_count + equal_to_count + greater_than_count);
+    performance_stats.add_comparisons(less_than_count + 2 * equal_to_count + 2 * greater_than_count);
     return std::tuple<int, int, int>(less_than_count, equal_to_count, greater_than_count);
 }
 

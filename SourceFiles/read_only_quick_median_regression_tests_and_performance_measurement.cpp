@@ -13,20 +13,18 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_te
 {
     std::cout << "Testing read_only_non_numerical_quick_median for (mostly) random access iterators\n";
     std::cout << "=================================================================================\n\n";
-
     m_which_algorithm = 0;
     test_algorithm();
+
     std::cout << "\n";
     std::cout << "Testing read_only_non_numerical_quick_median for bidirectional iterators\n";
     std::cout << "========================================================================\n\n";
-
     m_which_algorithm = 1;
     test_algorithm();
 
     std::cout << "\n";
     std::cout << "Testing read_only_non_numerical_quick_median for forward iterators\n";
     std::cout << "==================================================================\n\n";
-
     m_which_algorithm = 2;
     test_algorithm();
 
@@ -578,7 +576,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::check_
 
 int read_only_quick_median_regression_tests_and_performance_measurement::m_check_true_count = 0;
 int read_only_quick_median_regression_tests_and_performance_measurement::m_monte_carlo_count =
-    10000; // recommended 1000 - 10000
+    10000; // recommended 10000
 int read_only_quick_median_regression_tests_and_performance_measurement::m_log10_of_size_of_largest_data_set =
-    5; // recommended 5
+    4; // recommended 5
 int read_only_quick_median_regression_tests_and_performance_measurement::m_which_algorithm = -1;
