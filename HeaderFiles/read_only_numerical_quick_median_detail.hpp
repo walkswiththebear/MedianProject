@@ -24,7 +24,7 @@ namespace read_only_numerical_quick_median_detail
 */
 template <typename Iterator, typename PerformanceStats>
 std::tuple<double, double, int>
-get_initial_sequence_data(Iterator begin, Iterator end, PerformanceStats& performance_stats)
+get_initial_sequence_data(Iterator begin, Iterator end, PerformanceStats &performance_stats)
 {
     assert(begin != end);
     double min_value = std::numeric_limits<double>::max();

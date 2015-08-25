@@ -41,7 +41,13 @@ class read_only_quick_median_regression_tests_and_performance_measurement
   private:
     /**
       * Class for keeping track of performance
+      *
+      * NOTE: The methods that increment the counts are private. Therefore, the median
+      * helper functions that call these methods must be friends of this class. Hence
+      * the lengthy friend declarations here. This is of course not very important. It
+      * was more an experiment in friends and templates.
       */
+
     class performance_stats
     {
         template <typename Iterator, typename PivotingsStrategy, typename PerformanceStats>
@@ -62,7 +68,7 @@ class read_only_quick_median_regression_tests_and_performance_measurement
         friend std::tuple<double, double, int>
         read_only_numerical_quick_median_detail::get_initial_sequence_data(Iterator begin,
                                                                            Iterator end,
-                                                                           PerformanceStats& performance_stats);
+                                                                           PerformanceStats &performance_stats);
 
         template <typename Iterator, typename PerformanceStats>
         friend std::tuple<Iterator, int, int> read_only_non_numerical_quick_median_detail::trim_sequence_left(

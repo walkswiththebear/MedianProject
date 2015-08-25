@@ -12,18 +12,105 @@
 
 #include <tuple>
 #include <assert.h>
-#include "read_only_non_numerical_quick_median_detail.hpp"
-#include "read_only_numerical_quick_median_detail.hpp"
+
+/*
+ * NOTE: The methods that increment the counts in the performance stats class are
+ * private. Therefore, the median helper functions that call these methods must
+ * be friends of the performance stats class. Hence the lengthy forward and friend
+ * declarations here. This is of course not very important. It was more an
+ * experiment in friends and templates.
+ */
 
 namespace median_project
 {
-namespace no_op_median_performance_stats
+
+namespace read_only_non_numerical_quick_median_detail
 {
+template <typename Iterator, typename PivotingsStrategy, typename PerformanceStats>
+typename std::pair<Iterator, Iterator>
+read_only_non_numerical_quick_median_internal(Iterator begin,
+                                              Iterator end,
+                                              PivotingsStrategy pivoting_strategy,
+                                              PerformanceStats &performance_stats);
+
+template <typename Iterator, typename PerformanceStats>
+std::tuple<Iterator, int, int>
+trim_sequence_left(Iterator active_sequence_begin,
+                   bool median_lower_bound_found,
+                   typename std::iterator_traits<Iterator>::value_type median_lower_bound,
+                   bool median_upper_bound_found,
+                   typename std::iterator_traits<Iterator>::value_type median_upper_bound,
+                   PerformanceStats &performance_stats);
+
+template <typename Iterator, typename PerformanceStats>
+std::tuple<Iterator, int, int>
+trim_sequence_right(Iterator active_sequence_end,
+                    bool median_lower_bound_found,
+                    typename std::iterator_traits<Iterator>::value_type median_lower_bound,
+                    bool median_upper_bound_found,
+                    typename std::iterator_traits<Iterator>::value_type median_upper_bound,
+                    PerformanceStats &performance_stats,
+                    std::forward_iterator_tag);
+
+template <typename Iterator, typename PerformanceStats>
+std::tuple<Iterator, int, int>
+trim_sequence_right(Iterator active_sequence_end,
+                    bool median_lower_bound_found,
+                    typename std::iterator_traits<Iterator>::value_type median_lower_bound,
+                    bool median_upper_bound_found,
+                    typename std::iterator_traits<Iterator>::value_type median_upper_bound,
+                    PerformanceStats &performance_stats,
+                    std::bidirectional_iterator_tag);
+
+class standard_pivoting_strategy;
+
+class pivoting_strategy_for_random_data;
+
+template <typename Iterator, typename PerformanceStats>
+std::tuple<int, int, int> count_elements(Iterator begin,
+                                         Iterator end,
+                                         typename std::iterator_traits<Iterator>::value_type pivot,
+                                         PerformanceStats &performance_stats);
+}
+
+namespace read_only_numerical_quick_median_detail
+{
+template <typename Iterator, typename PerformanceStats>
+double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, PerformanceStats &performance_stats);
+
+template <typename Iterator, typename PerformanceStats>
+std::tuple<double, double, int>
+get_initial_sequence_data(Iterator begin, Iterator end, PerformanceStats &performance_stats);
+
+template <typename Iterator, typename PerformanceStats>
+std::tuple<Iterator, int, int> trim_sequence_left(Iterator active_sequence_begin,
+                                                  double median_lower_bound,
+                                                  double median_upper_bound,
+                                                  PerformanceStats &performance_stats);
+
+template <typename Iterator, typename PerformanceStats>
+std::tuple<Iterator, int, int> trim_sequence_right(Iterator active_sequence_end,
+                                                   double median_lower_bound,
+                                                   double median_upper_bound,
+                                                   PerformanceStats &performance_stats,
+                                                   std::forward_iterator_tag);
+
+template <typename Iterator, typename PerformanceStats>
+std::tuple<Iterator, int, int> trim_sequence_right(Iterator active_sequence_end,
+                                                   double median_lower_bound,
+                                                   double median_upper_bound,
+                                                   PerformanceStats &performance_stats,
+                                                   std::bidirectional_iterator_tag);
+
+template <typename Iterator, typename PerformanceStats>
+std::tuple<int, int, int, double, double>
+count_elements(Iterator begin, Iterator end, double pivot, PerformanceStats &performance_stats);
+}
 
 /*
-* No-op performance stats class, to be used as the default in the algorithm.
+* No-op performance stats class for median, to be used as the default in the algorithm.
 */
-class no_op_performance_stats
+class no_op_median_performance_stats
 {
     template <typename Iterator, typename PivotingsStrategy, typename PerformanceStats>
     friend typename std::pair<Iterator, Iterator>
@@ -83,7 +170,7 @@ class no_op_performance_stats
     friend std::tuple<double, double, int>
     read_only_numerical_quick_median_detail::get_initial_sequence_data(Iterator begin,
                                                                        Iterator end,
-                                                                       PerformanceStats& performance_stats);
+                                                                       PerformanceStats &performance_stats);
 
     template <typename Iterator, typename PerformanceStats>
     friend std::tuple<Iterator, int, int>
@@ -129,7 +216,6 @@ class no_op_performance_stats
     {
     }
 };
-} // end namespace no_op_median_performance_stats
 } // end namespace median_project
 
 #endif // TMB_NO_OP_MEDIAN_PERFORMANCE_STATS_08_24_2015_HPP

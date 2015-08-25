@@ -7,7 +7,6 @@
 #include <algorithm>
 #include <random>
 #include "read_only_quick_median_regression_tests_and_performance_measurement.hpp"
-#include "no_op_median_performance_stats.hpp"
 #include "any_iterator.hpp"
 
 void read_only_quick_median_regression_tests_and_performance_measurement::run_tests()
@@ -160,7 +159,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_a
 
 void read_only_quick_median_regression_tests_and_performance_measurement::run_white_box_tests()
 {
-    no_op_median_performance_stats::no_op_performance_stats stats;
+    no_op_median_performance_stats stats;
 
     // One element.
     std::list<double> lis{ 1. };
@@ -426,7 +425,7 @@ template <typename Iterator>
 void read_only_quick_median_regression_tests_and_performance_measurement::run_a_few_shuffles(Iterator begin,
                                                                                              Iterator end)
 {
-    no_op_median_performance_stats::no_op_performance_stats stats;
+    no_op_median_performance_stats stats;
 
     for (int i = 0; i < 5; ++i)
     {
@@ -471,7 +470,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_no
 
     // Do it once for the sorted sequence, but let it not distort the
     // average complexity results.
-    performance_stats unused_stats = performance_stats();
+    no_op_median_performance_stats unused_stats;
     verify_median(sequence.cbegin(), sequence.cend(), unused_stats);
 
     // Shuffle, check median, and keep track of performance stats

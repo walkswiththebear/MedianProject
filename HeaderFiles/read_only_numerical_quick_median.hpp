@@ -26,6 +26,8 @@
  */
 
 #include "read_only_numerical_quick_median_detail.hpp"
+#include "no_op_median_performance_stats.hpp"
+
 namespace median_project
 {
 
@@ -40,7 +42,7 @@ namespace median_project
 template <typename Iterator>
 std::pair<Iterator, Iterator> read_only_numerical_quick_median(Iterator begin, Iterator end)
 {
-    no_op_median_performance_stats::no_op_performance_stats performance_stats;
+    no_op_median_performance_stats performance_stats;
     return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
         begin, end, performance_stats);
 }

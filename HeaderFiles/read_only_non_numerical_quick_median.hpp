@@ -58,7 +58,7 @@ namespace median_project
 template <typename Iterator>
 std::pair<Iterator, Iterator> read_only_non_numerical_quick_median(Iterator begin, Iterator end)
 {
-    no_op_median_performance_stats::no_op_performance_stats performance_stats;
+    no_op_median_performance_stats performance_stats;
     return read_only_non_numerical_quick_median_detail::read_only_non_numerical_quick_median_internal(
         begin, end, read_only_non_numerical_quick_median_detail::standard_pivoting_strategy(), performance_stats);
 }
@@ -81,7 +81,7 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median(Iterator begi
 template <typename Iterator>
 std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_random_data(Iterator begin, Iterator end)
 {
-    no_op_median_performance_stats::no_op_performance_stats performance_stats;
+    no_op_median_performance_stats performance_stats;
     return read_only_non_numerical_quick_median_detail::read_only_non_numerical_quick_median_internal(
         begin,
         end,
