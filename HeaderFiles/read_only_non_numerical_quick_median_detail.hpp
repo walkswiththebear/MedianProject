@@ -3,11 +3,6 @@
 //  in all copies. This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 
-// Revision History
-// ================
-//
-// 21 Jul 2015 (Thomas Becker) Created
-
 #ifndef TMB_READ_ONLY_NON_NUMERICAL_QUICK_MEDIAN_DETAIL_07_21_2015_HPP
 #define TMB_READ_ONLY_NON_NUMERICAL_QUICK_MEDIAN_DETAIL_07_21_2015_HPP
 
@@ -18,7 +13,7 @@
 #include <tuple>
 #include <assert.h>
 
-namespace tmb_algorithms
+namespace median_project
 {
 namespace read_only_non_numerical_quick_median_detail
 {
@@ -574,6 +569,6 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_internal(Iter
     return median_pos_pair;
 }
 } // end namespace read_only_non_numerical_quick_median_detail
-} // end namespace tmb_algorithms
+} // end namespace median_project
 
 #endif // TMB_READ_ONLY_NON_NUMERICAL_QUICK_MEDIAN_DETAIL_07_21_2015_HPP

@@ -3,13 +3,8 @@
 //  in all copies. This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 
-// Revision History
-// ================
-//
-// 21 Jul 2015 (Thomas Becker) Created
-
-#ifndef TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_07_21_2015_HPP
-#define TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_07_21_2015_HPP
+#ifndef TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_08_24_2015_HPP
+#define TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_08_24_2015_HPP
 
 /*
  * Non-modifying median algorithm in average N * log(N) time. This is appropriate
@@ -31,7 +26,7 @@
  */
 
 #include "read_only_numerical_quick_median_detail.hpp"
-namespace tmb_algorithms
+namespace median_project
 {
 
 /*
@@ -49,6 +44,6 @@ std::pair<Iterator, Iterator> read_only_numerical_quick_median(Iterator begin, I
     return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
         begin, end, performance_stats);
 }
-} // end namespace tmb_algorithms
+} // end namespace median_project
 
-#endif // TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_07_21_2015_HPP
+#endif // TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_08_24_2015_HPP

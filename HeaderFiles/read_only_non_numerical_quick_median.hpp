@@ -3,11 +3,6 @@
 //  in all copies. This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 
-// Revision History
-// ================
-//
-// 21 Jul 2015 (Thomas Becker) Created
-
 #ifndef TMB_READ_ONLY_NON_NUMERICAL_QUICK_MEDIAN_07_21_2015_HPP
 #define TMB_READ_ONLY_NON_NUMERICAL_QUICK_MEDIAN_07_21_2015_HPP
 
@@ -44,7 +39,7 @@
 #include "read_only_non_numerical_quick_median_detail.hpp"
 #include "no_op_median_performance_stats.hpp"
 
-namespace tmb_algorithms
+namespace median_project
 {
 
 /*
@@ -93,6 +88,6 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_random_data(I
         read_only_non_numerical_quick_median_detail::pivoting_strategy_for_random_data(),
         performance_stats);
 }
-} // end namespace tmb_algorithms
+} // end namespace median_project
 
 #endif // TMB_READ_ONLY_NON_NUMERICAL_QUICK_MEDIAN_07_21_2015_HPP

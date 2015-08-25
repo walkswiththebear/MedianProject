@@ -3,13 +3,8 @@
 //  in all copies. This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 
-// Revision History
-// ================
-//
-// 21 Jul 2015 (Thomas Becker) Created
-
-#ifndef TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_DETAIL_07_21_2015_HPP
-#define TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_DETAIL_07_21_2015_HPP
+#ifndef TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_DETAIL_08_24_2015_HPP
+#define TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_DETAIL_08_24_2015_HPP
 
 /*
  * Implementation details for read-only numerical median algorithms.
@@ -19,7 +14,7 @@
 #include <limits>
 #include <assert.h>
 
-namespace tmb_algorithms
+namespace median_project
 {
 namespace read_only_numerical_quick_median_detail
 {
@@ -435,6 +430,6 @@ double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, P
     return median;
 }
 } // end namespace read_only_numerical_quick_median_detail
-} // end namespace tmb_algorithms
+} // end namespace median_project
 
-#endif // TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_DETAIL_07_21_2015_HPP
+#endif // TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_DETAIL_08_24_2015_HPP

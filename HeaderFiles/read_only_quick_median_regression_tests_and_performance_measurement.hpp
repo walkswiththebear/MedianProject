@@ -5,7 +5,7 @@
 #include <cmath>
 #include "read_only_non_numerical_quick_median.hpp"
 #include "read_only_numerical_quick_median.hpp"
-using namespace tmb_algorithms;
+using namespace median_project;
 
 /*
  * Regression test class for read-only median algorithms. The only public

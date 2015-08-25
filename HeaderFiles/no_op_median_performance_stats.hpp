@@ -3,11 +3,6 @@
 //  in all copies. This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 
-// Revision History
-// ================
-//
-// 24 Aug 2015 (Thomas Becker) Created
-
 #ifndef TMB_NO_OP_MEDIAN_PERFORMANCE_STATS_08_24_2015_HPP
 #define TMB_NO_OP_MEDIAN_PERFORMANCE_STATS_08_24_2015_HPP
 
@@ -20,7 +15,7 @@
 #include "read_only_non_numerical_quick_median_detail.hpp"
 #include "read_only_numerical_quick_median_detail.hpp"
 
-namespace tmb_algorithms
+namespace median_project
 {
 namespace no_op_median_performance_stats
 {
@@ -135,6 +130,6 @@ class no_op_performance_stats
     }
 };
 } // end namespace no_op_median_performance_stats
-} // end namespace tmb_algorithms
+} // end namespace median_project
 
 #endif // TMB_NO_OP_MEDIAN_PERFORMANCE_STATS_08_24_2015_HPP
