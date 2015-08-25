@@ -12,43 +12,43 @@
 
 void read_only_quick_median_regression_tests_and_performance_measurement::run_tests()
 {
-    /*    std::cout << "Testing read_only_non_numerical_quick_median for (mostly) random access iterators\n";
-        std::cout << "=================================================================================\n\n";
+    std::cout << "Testing read_only_non_numerical_quick_median for (mostly) random access iterators\n";
+    std::cout << "=================================================================================\n\n";
 
-        m_which_algorithm = 0;
-        test_algorithm();
-        std::cout << "\n";
-        std::cout << "Testing read_only_non_numerical_quick_median for bidirectional iterators\n";
-        std::cout << "========================================================================\n\n";
+    m_which_algorithm = 0;
+    test_algorithm();
+    std::cout << "\n";
+    std::cout << "Testing read_only_non_numerical_quick_median for bidirectional iterators\n";
+    std::cout << "========================================================================\n\n";
 
-        m_which_algorithm = 1;
-        test_algorithm();
+    m_which_algorithm = 1;
+    test_algorithm();
 
-        std::cout << "\n";
-        std::cout << "Testing read_only_non_numerical_quick_median for forward iterators\n";
-        std::cout << "==================================================================\n\n";
+    std::cout << "\n";
+    std::cout << "Testing read_only_non_numerical_quick_median for forward iterators\n";
+    std::cout << "==================================================================\n\n";
 
-        m_which_algorithm = 2;
-        test_algorithm();
+    m_which_algorithm = 2;
+    test_algorithm();
 
-        std::cout << "\n";
-        std::cout << "Testing read_only_non_numerical_quick_median_random_data\n";
-        std::cout << "========================================================\n\n";
-        m_which_algorithm = 3;
-        test_algorithm();
+    std::cout << "\n";
+    std::cout << "Testing read_only_non_numerical_quick_median_random_data\n";
+    std::cout << "========================================================\n\n";
+    m_which_algorithm = 3;
+    test_algorithm();
 
-        std::cout << "\n";
-        std::cout << "Testing read_only_non_numerical_quick_median_random_data for bidirectional iterators\n";
-        std::cout << "====================================================================================\n\n";
-        m_which_algorithm = 4;
-        test_algorithm();
+    std::cout << "\n";
+    std::cout << "Testing read_only_non_numerical_quick_median_random_data for bidirectional iterators\n";
+    std::cout << "====================================================================================\n\n";
+    m_which_algorithm = 4;
+    test_algorithm();
 
-        std::cout << "\n";
-        std::cout << "Testing read_only_non_numerical_quick_median_random_data for forward iterators\n";
-        std::cout << "==============================================================================\n\n";
-        m_which_algorithm = 5;
-        test_algorithm();
-      */
+    std::cout << "\n";
+    std::cout << "Testing read_only_non_numerical_quick_median_random_data for forward iterators\n";
+    std::cout << "==============================================================================\n\n";
+    m_which_algorithm = 5;
+    test_algorithm();
+
     std::cout << "\n";
     std::cout << "Testing read_only_numerical_quick_median\n";
     std::cout << "========================================\n\n";
@@ -65,7 +65,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
     Iterator end,
     PerformanceStats &performance_stats)
 {
-    /*    typedef typename std::iterator_traits<Iterator>::value_type value_type;
+    typedef typename std::iterator_traits<Iterator>::value_type value_type;
     typedef typename IteratorTypeErasure::any_iterator<value_type, std::bidirectional_iterator_tag, value_type const &>
     bidirectional_it;
     typedef typename IteratorTypeErasure::any_iterator<value_type, std::forward_iterator_tag, value_type const &>
@@ -136,7 +136,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
 
         return (*std::get<0>(median_pos_pair) + *std::get<1>(median_pos_pair)) / 2.0;
     }
-       else */ if (m_which_algorithm == 6)
+    else if (m_which_algorithm == 6)
     {
         return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
             begin, end, performance_stats);
@@ -406,6 +406,12 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_wh
     // Be redundant to test verify_median.
     check_true(tested_algorithm(vec.begin(), vec.end(), stats) == 3.0);
 
+    // This one didn't work with the first version of the numerical median algorithm.
+    vec = std::vector<double>{ -4., -5., -4., -3., -1., 2., 3., 4., 4., 3. };
+    verify_median(vec.begin(), vec.end(), stats);
+    // Be redundant to test verify_median.
+    check_true(tested_algorithm(vec.begin(), vec.end(), stats) == .5);
+
     // Just for the heck of it...
     vec.push_back(0.);
     verify_median(vec.begin(), vec.end(), stats);
@@ -557,7 +563,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::check_
 
 int read_only_quick_median_regression_tests_and_performance_measurement::m_check_true_count = 0;
 int read_only_quick_median_regression_tests_and_performance_measurement::m_monte_carlo_count =
-    1000; // recommended 1000 - 10000
+    10000; // recommended 1000 - 10000
 int read_only_quick_median_regression_tests_and_performance_measurement::m_log10_of_size_of_largest_data_set =
-    4; // recommended 5
+    5; // recommended 5
 int read_only_quick_median_regression_tests_and_performance_measurement::m_which_algorithm = -1;

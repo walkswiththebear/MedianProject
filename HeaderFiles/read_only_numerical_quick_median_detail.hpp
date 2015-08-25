@@ -29,11 +29,11 @@ namespace read_only_numerical_quick_median_detail
 */
 template <typename Iterator, typename PerformanceStats>
 std::tuple<double, double, int>
-get_initial_sequence_data(Iterator begin, Iterator end, PerformanceStats performance_stats)
+get_initial_sequence_data(Iterator begin, Iterator end, PerformanceStats& performance_stats)
 {
     assert(begin != end);
     double min_value = std::numeric_limits<double>::max();
-    double max_value = std::numeric_limits<double>::min();
+    double max_value = -std::numeric_limits<double>::max();
     int length = 0;
     for (Iterator run = begin; run != end; ++run)
     {
@@ -156,7 +156,7 @@ std::tuple<int, int, int, double, double>
 count_elements(Iterator begin, Iterator end, double pivot, PerformanceStats &performance_stats)
 {
     int less_than_count = 0, equal_to_count = 0, greater_than_count = 0;
-    double max_of_elements_less_than_pivot = std::numeric_limits<double>::min();
+    double max_of_elements_less_than_pivot = -std::numeric_limits<double>::max();
     double min_of_elements_greater_than_pivot = std::numeric_limits<double>::max();
     for (Iterator run = begin; run != end; ++run)
     {
@@ -177,6 +177,7 @@ count_elements(Iterator begin, Iterator end, double pivot, PerformanceStats &per
         }
     }
 
+    performance_stats.increment_pivot_count();
     performance_stats.add_comparisons(2 * less_than_count + 2 * equal_to_count + 3 * greater_than_count);
     return std::tuple<int, int, int, double, double>(less_than_count,
                                                      equal_to_count,
@@ -184,58 +185,6 @@ count_elements(Iterator begin, Iterator end, double pivot, PerformanceStats &per
                                                      max_of_elements_less_than_pivot,
                                                      min_of_elements_greater_than_pivot);
 }
-
-/*
-* No-op performance stats class, to be used as the default in the algorithm.
-*/
-class no_op_performance_stats
-{
-    template <typename Iterator, typename PerformanceStats>
-    friend double
-    read_only_numerical_quick_median_internal(Iterator begin, Iterator end, PerformanceStats &performance_stats);
-
-    template <typename Iterator, typename PerformanceStats>
-    friend std::tuple<double, double, int>
-    get_initial_sequence_data(Iterator begin, Iterator end, PerformanceStats performance_stats);
-
-    template <typename Iterator, typename PerformanceStats>
-    friend std::tuple<Iterator, int, int> trim_sequence_left(Iterator active_sequence_begin,
-                                                             double median_lower_bound,
-                                                             double median_upper_bound,
-                                                             PerformanceStats &performance_stats);
-
-    template <typename Iterator, typename PerformanceStats>
-    friend std::tuple<Iterator, int, int> trim_sequence_right(Iterator active_sequence_end,
-                                                              double median_lower_bound,
-                                                              double median_upper_bound,
-                                                              PerformanceStats &performance_stats,
-                                                              std::forward_iterator_tag);
-
-    template <typename Iterator, typename PerformanceStats>
-    friend std::tuple<Iterator, int, int> trim_sequence_right(Iterator active_sequence_end,
-                                                              double median_lower_bound,
-                                                              double median_upper_bound,
-                                                              PerformanceStats &performance_stats,
-                                                              std::bidirectional_iterator_tag);
-
-    template <typename Iterator, typename PerformanceStats>
-    friend std::tuple<int, int, int, double, double>
-    count_elements(Iterator begin, Iterator end, double pivot, PerformanceStats &performance_stats);
-
-  private:
-    void set_sequence_length(int len)
-    {
-    }
-    void increment_pivot_count()
-    {
-    }
-    void add_comparisons(int comps)
-    {
-    }
-    void update_averages()
-    {
-    }
-};
 
 /*
 * The function read_only_numerical_quick_median forwards to this "internal" function.
@@ -278,7 +227,7 @@ double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, P
     double median_lower_bound = std::numeric_limits<double>::max();
     int num_discarded_elements_less_than_median_lower_bound = 0;
     //
-    double median_upper_bound = std::numeric_limits<double>::min();
+    double median_upper_bound = -std::numeric_limits<double>::max();
     int num_discarded_elements_greater_than_median_upper_bound = 0;
 
     // If the number of elements is even, the median is an interval of
@@ -302,6 +251,7 @@ double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, P
     median_lower_bound = std::get<0>(initialSequenceData);
     median_upper_bound = std::get<1>(initialSequenceData);
     total_length_of_sequence = std::get<2>(initialSequenceData);
+    performance_stats.set_sequence_length(total_length_of_sequence);
 
     // Main loop for selecting and processing pivots.
     //

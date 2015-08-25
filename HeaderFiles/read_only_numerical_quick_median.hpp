@@ -31,17 +31,6 @@
  */
 
 #include "read_only_numerical_quick_median_detail.hpp"
-/*sequence_copy = std::vector of length 10, capacity 10 = {-4,
- -5,
- -4,
- -3,
- -1,
- 2,
- 3,
- 4,
- 4,
- 3
-}*/
 namespace tmb_algorithms
 {
 
@@ -56,7 +45,7 @@ namespace tmb_algorithms
 template <typename Iterator>
 std::pair<Iterator, Iterator> read_only_numerical_quick_median(Iterator begin, Iterator end)
 {
-    read_only_numerical_quick_median_detail::no_op_performance_stats performance_stats;
+    no_op_median_performance_stats::no_op_performance_stats performance_stats;
     return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
         begin, end, performance_stats);
 }

@@ -62,7 +62,7 @@ class read_only_quick_median_regression_tests_and_performance_measurement
         friend std::tuple<double, double, int>
         read_only_numerical_quick_median_detail::get_initial_sequence_data(Iterator begin,
                                                                            Iterator end,
-                                                                           PerformanceStats performance_stats);
+                                                                           PerformanceStats& performance_stats);
 
         template <typename Iterator, typename PerformanceStats>
         friend std::tuple<Iterator, int, int> read_only_non_numerical_quick_median_detail::trim_sequence_left(

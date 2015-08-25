@@ -88,7 +88,7 @@ class no_op_performance_stats
     friend std::tuple<double, double, int>
     read_only_numerical_quick_median_detail::get_initial_sequence_data(Iterator begin,
                                                                        Iterator end,
-                                                                       PerformanceStats performance_stats);
+                                                                       PerformanceStats& performance_stats);
 
     template <typename Iterator, typename PerformanceStats>
     friend std::tuple<Iterator, int, int>
