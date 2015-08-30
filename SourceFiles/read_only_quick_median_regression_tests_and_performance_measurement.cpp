@@ -417,6 +417,11 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_wh
     vec.push_back(0.);
     verify_median(vec.begin(), vec.end(), stats);
     run_a_few_shuffles(vec.begin(), vec.end());
+
+    // To test a case that is kind of special in torben.c
+    vec = std::vector<double>{ .5, 2., 3., 3.5 };
+    verify_median(vec.begin(), vec.end(), stats);
+    run_a_few_shuffles(vec.begin(), vec.end());
 }
 
 template <typename Iterator>
@@ -448,7 +453,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_fi
 {
 
     run_no_duplicates_fixed_length_test(len);
-    run_fixed_length_test_with_duplicates(len, - 2 * len, 2 * len);
+    run_fixed_length_test_with_duplicates(len, -2 * len, 2 * len);
     run_fixed_length_test_with_duplicates(len, -len / 2, len / 2);
     run_fixed_length_test_with_duplicates(len, -len / 5, len / 5);
     run_fixed_length_test_with_duplicates(len, 0, len / 10);

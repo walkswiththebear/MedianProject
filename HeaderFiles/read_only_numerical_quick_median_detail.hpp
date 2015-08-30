@@ -47,7 +47,7 @@ get_initial_sequence_data(Iterator begin, Iterator end, PerformanceStats &perfor
  */
 inline double mean(double x, double y)
 {
-    return x + (y - x) / 2.0;
+    return x / 2.0 + y / 2.0;
 }
 
 /*
