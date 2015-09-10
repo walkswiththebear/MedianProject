@@ -107,11 +107,14 @@ std::tuple<int, int, int, double, double>
 count_elements(Iterator begin, Iterator end, double pivot, PerformanceStats &performance_stats);
 }
 
-/*
+/**
 * No-op performance stats class for median, to be used as the default in the algorithm.
 */
 class no_op_median_performance_stats
 {
+    // Friends
+    // =======
+
     template <typename Iterator, typename PivotingsStrategy, typename PerformanceStats>
     friend typename std::pair<Iterator, Iterator>
     read_only_non_numerical_quick_median_detail::read_only_non_numerical_quick_median_internal(
@@ -202,6 +205,9 @@ class no_op_median_performance_stats
                                                             double pivot,
                                                             PerformanceStats &performance_stats);
 
+    // No-op methods
+    // =============
+    
   private:
     void set_sequence_length(int len)
     {

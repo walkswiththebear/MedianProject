@@ -13,9 +13,10 @@
  *
  * The algorithm works for numerical and non-numerical data, that is, elements
  * do not have to support arithmetic operations such as calculating a mean (midpoint)
- * of two elements. For numerical data, there is a better algorithm (coming soon).
+ * of two elements. For numerical data, there is a better algorithm, namely,
+ * read_only_numerical_quick_median.
  *
- * Arguments are begin and end iterators to the data. These do not  have to be better
+ * Arguments are begin and end iterators to the data. These do not have to be better
  * than forward iterators. The return value is a pair of iterators. For an uneven
  * number of elements, both iterators point to the median. For an even number of
  * elements, they point to the left and right endpoint of the median interval.
@@ -31,9 +32,8 @@
  * not random access. The performance of the second version does not vary significantly
  * for different iterator categories.
  *
- * A brief description of the algorithm can be found at lines 438 - 456 of the implementation
- * file "read_only_non_numerical_quick_median_detail.hpp". There will soon be an article
- * on my personal web site with more details about background, context, existing work, etc.
+ * A brief description of the algorithm can be found at lines 372 - 489 of the implementation
+ * file "read_only_non_numerical_quick_median_detail.hpp".
  */
 
 #include "read_only_non_numerical_quick_median_detail.hpp"
@@ -42,11 +42,12 @@
 namespace median_project
 {
 
-/*
+/**
  * Function read_only_non_numerical_quick_median
  * ==============================================
  *
- * Non-modifying median algorithm for non-numerical data in average N * log(N) time.
+ * Non-modifying median algorithm for non-numerical and numerical data in average
+ * N * log(N) time. For numerical data, consider using read_only_numerical_quick_median.
  *
  * For best results, use random access iterators. Bidirectional iterators will work
  * well, but performance may suffer. Forward iterators will cause noticeable
@@ -63,15 +64,15 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median(Iterator begi
         begin, end, read_only_non_numerical_quick_median_detail::standard_pivoting_strategy(), performance_stats);
 }
 
-/*
+/**
  * Function read_only_non_numerical_quick_median_random_data
  * =========================================================
  *
- * Non-modifying median algorithm for non-numerical data in average N * log(N) time.
- * This version of the algorithm improves performance if the data is essentially the
- * result of a random walk, that is, it has no particular likelihood of being sorted.
- * This is true in particular when the iterators used are no better than forward
- * iterators.
+ * Non-modifying median algorithm for non-numerical and numerical data in average 
+ * N * log(N) time. This version of the algorithm improves performance if the data is 
+ * essentially the result of a random walk, that is, it has no particular likelihood 
+ * of being sorted. This is true in particular when the iterators used are no better 
+ * than forward iterators. For numerical data, consider using read_only_numerical_quick_median.
  *
  * IMPORTANT: For sorted data, the performance of this version of the algorithm will degrade
  * to N^2. Use this algorithm only if your data is essentially random, that is, has little or

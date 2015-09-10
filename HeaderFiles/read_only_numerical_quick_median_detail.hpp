@@ -19,8 +19,8 @@ namespace median_project
 namespace read_only_numerical_quick_median_detail
 {
 
-/*
- * Get min, max, and length of sequence.
+/**
+ * Gets min, max, and length of the sequence.
 */
 template <typename Iterator, typename PerformanceStats>
 std::tuple<double, double, int>
@@ -41,17 +41,20 @@ get_initial_sequence_data(Iterator begin, Iterator end, PerformanceStats &perfor
     return std::tuple<double, double, int>(min_value, max_value, length);
 }
 
-/*
- * Calculate the mean of two doubles. Risk overflow rather than underflow.
- * Perhaps make customizable later.
+/**
+ * Calculates the mean of two doubles. Guards against overflow. If the calculated mean
+ * lies outside of the interval (very small numbers!), it is set to the min or max of 
+ * the two numbers, as the case may be.
  */
 inline double mean(double x, double y)
 {
-    return x / 2.0 + y / 2.0;
+    double mean = x / 2.0 + y / 2.0;
+    mean = std::min(std::max(x, y), std::max(std::min(x, y), mean));
+    return mean;
 }
 
-/*
- * Trim sequence at beginning.This is a minor optimization that is just too obvious to
+/**
+ * Trims the sequence at beginning.This is a minor optimization that is just too obvious to
  * be passed up.
  */
 template <typename Iterator, typename PerformanceStats>
@@ -88,8 +91,8 @@ std::tuple<Iterator, int, int> trim_sequence_left(Iterator active_sequence_begin
                                           num_discarded_elements_greater_than_median_upper_bound);
 }
 
-/*
- * Trim sequence at end. This is a minor optimization that can be applied
+/**
+ * Trims sequence at end. This is a minor optimization that can be applied
  * only with bidirectional iterators or better.
  */
 template <typename Iterator, typename PerformanceStats>
@@ -141,7 +144,7 @@ std::tuple<Iterator, int, int> trim_sequence_right(Iterator active_sequence_end,
                                           num_discarded_elements_greater_than_median_upper_bound);
 }
 
-/*
+/**
 * Counts the number of elements less than, greater than, and equal to a given element in the sequence
 * [begin, end). Also keeps track of the maximum of elements less than the pivot and the minimum of
 * elements greater than the pivot.
@@ -181,7 +184,7 @@ count_elements(Iterator begin, Iterator end, double pivot, PerformanceStats &per
                                                      min_of_elements_greater_than_pivot);
 }
 
-/*
+/**
 * The function read_only_numerical_quick_median forwards to this "internal" function.
 */
 template <typename Iterator, typename PerformanceStats>
@@ -193,37 +196,34 @@ double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, P
     }
 
     /*
-    * The algorithm is an optimized version of the brute force algorithm, taking its
-    * cues from quickselect, which in turn is based on quicksort.
-    *
-    * Quicksort works by selecting a pivot, putting it into its final position in
-    * the sort order, then recursively applying itself to the two subsequences on
-    * either side of the pivot. Quickselect proceeds in the same way, except that
-    * it does not have to apply itself to both subsequences: it is obvious which
-    * subsequence contains the n-th element. (This optimization is what causes
-    * quickselect to have average complexity O(N) rather than O(N logN).) One way
-    * of looking at that is to say when quickselect deals with a pivot, it may not
-    * have found the n-th element, but it has found an upper or lower bound, as the
-    * case may be, for the n-th element. Obviously, a read-only version of quickselect
-    * can do the same thing. The difference is that it cannot pass to geometrically
-    * shrinking subsequences, because it cannot do any sorting. Instead, it has to
-    * keep track of the current upper and lower bounds. It then makes use of that
-    * information by skipping all elements that are not within these bounds when it
-    * comes to selecting a pivot.
-    *
-    * The description above is identical to the one that we gave for the non-numerical
-    * case. The additional optimization here (that is, in the numerical case), is this:
-    * instead of selecting a pivot from the available elements between the current
-    * lower and upper bound, we *calculate* a pivot, namely, as the mean of the current
-    * lower and upper bound. This reflects the assumption that the median won't be too
-    * far from the mean.
-    */
+     * The algorithm is an optimized version of the brute force algorithm, taking its
+     * cues from quickselect, which in turn is based on quicksort.
+     *
+     * Quicksort works by selecting a pivot, putting it into its final position in
+     * the sort order, then recursively applying itself to the two subsequences on
+     * either side of the pivot. Quickselect proceeds in the same way, except that
+     * it does not have to apply itself to both subsequences: it is obvious which
+     * subsequence contains the n-th element. (This optimization is what causes
+     * quickselect to have average complexity O(N) rather than O(N logN).) One way
+     * of looking at that is to say when quickselect deals with a pivot, it may not
+     * have found the n-th element, but it has found an upper or lower bound, as the
+     * case may be, for the n-th element. Obviously, a read-only version of quickselect
+     * can do the same thing. The difference is that it cannot pass to geometrically
+     * shrinking subsequences, because it cannot do any sorting. Instead, it has to
+     * keep track of the current upper and lower bounds. It then makes use of that
+     * information by skipping all elements that are not within these bounds when it
+     * comes to selecting a pivot.
+     *
+     * The description above is identical to the one that we gave for the non-numerical
+     * case. The additional optimization here (that is, in the numerical case), is this:
+     * instead of selecting a pivot from the available elements between the current
+     * lower and upper bound, we *calculate* a pivot, namely, as the mean of the current
+     * lower and upper bound. This reflects the assumption that the median won't be too
+     * far from the mean.
+     */
 
     double median_lower_bound = std::numeric_limits<double>::max();
-    int num_discarded_elements_less_than_median_lower_bound = 0;
-    //
     double median_upper_bound = -std::numeric_limits<double>::max();
-    int num_discarded_elements_greater_than_median_upper_bound = 0;
 
     // If the number of elements is even, the median is an interval of
     // which both ends must be found.
@@ -233,13 +233,14 @@ double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, P
     bool median_interval_right_endpoint_found = false;
     double median_interval_right_endpoint = 0.;
 
-    // Loop for calculating and processing pivots. Each pivoting either
-    // finds the median, in which case we're done, or it gives us a new
-    // lower or upper bound, as the case may be, for the median.
+    // As a minor optimization, we trim the sequence at the beginning and
+    // the end, discarding elements that are not candidates for a pivot.
     //
     int total_length_of_sequence = 0;
     Iterator active_sequence_begin = begin;
     Iterator active_sequence_end = end;
+    int num_discarded_elements_less_than_median_lower_bound = 0;
+    int num_discarded_elements_greater_than_median_upper_bound = 0;
 
     // Calculate min, max, and length of sequence
     std::tuple<double, double, int> initialSequenceData = get_initial_sequence_data(begin, end, performance_stats);
@@ -281,13 +282,15 @@ double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, P
         num_discarded_elements_greater_than_median_upper_bound +=
             (std::get<2>(trim_left_result) + std::get<2>(trim_right_result));
 
-        // Calculate the pivot and count the number of elements less than, equal to, and greater
-        // than the pivot in the subsequence [run, end).
+        /*
+         * Calculate the pivot and count the number of elements less than, equal to, and greater
+         * than the pivot in the subsequence [run, end).
+         */
+
         double pivot = mean(median_lower_bound, median_upper_bound);
-        //
         std::tuple<int, int, int, double, double> element_counts =
             count_elements(active_sequence_begin, active_sequence_end, pivot, performance_stats);
-        //
+
         int num_elements_less_than_pivot =
             std::get<0>(element_counts) + num_discarded_elements_less_than_median_lower_bound;
         int num_elements_equal_to_pivot = std::get<1>(element_counts);
@@ -296,16 +299,15 @@ double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, P
         double max_of_less_than_pivot = std::get<3>(element_counts);
         double min_of_greater_than_pivot = std::get<4>(element_counts);
 
-        //
-        // Check what we found: new lower bound, new upper bound, median position, left or right endpoint of median
-        // interval.
-        //
+        /*
+         * Check what we found: new lower bound, new upper bound, median position, left or right endpoint of median
+         * interval.
+         */
 
         // Too many elements above pivot: new lower bound found.
         //
         if (num_elements_greater_than_pivot > (total_length_of_sequence / 2) + 1)
         {
-            // Could use pivot unconditionally here, but...
             median_lower_bound = min_of_greater_than_pivot;
         }
         //
@@ -313,7 +315,6 @@ double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, P
         //
         else if (num_elements_less_than_pivot > (total_length_of_sequence / 2) + 1)
         {
-            // Could use pivot unconditionally here, but...
             median_upper_bound = max_of_less_than_pivot;
         }
         //
@@ -343,7 +344,7 @@ double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, P
             //
             // Sequence length is an odd number: one or both median interval endpoints found.
             //
-            // In the case distinctions below, p stands for the pivot, an e_n stands for the
+            // In the case distinctions below, p stands for the pivot, and e_n stands for the
             // element at 1-based position n. So e_{n/2} is the left endpoint of the median
             // interval.
             //

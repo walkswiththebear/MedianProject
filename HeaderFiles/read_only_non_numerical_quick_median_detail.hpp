@@ -18,8 +18,8 @@ namespace median_project
 namespace read_only_non_numerical_quick_median_detail
 {
 
-/*
- * Trim sequence at beginning.
+/**
+ * Function that trims a sequence at beginning.
  */
 template <typename Iterator, typename PerformanceStats>
 std::tuple<Iterator, int, int>
@@ -58,8 +58,8 @@ trim_sequence_left(Iterator active_sequence_begin,
                                           num_discarded_elements_greater_than_or_equal_to_median_upper_bound);
 }
 
-/*
- * Trim sequence at end. This is a minor optimization that can be applied
+/**
+ * Function that trims a sequence at end. This is a minor optimization that can be applied
  * only with bidirectional iterators or better.
  */
 template <typename Iterator, typename PerformanceStats>
@@ -117,7 +117,7 @@ trim_sequence_right(Iterator active_sequence_end,
                                           num_discarded_elements_greater_than_or_equal_to_median_upper_bound);
 }
 
-/*
+/**
 * Standard pivoting strategy: look for a pivot near the middle of the
 * sequence. There is a version for bidirectional iterators or better,
 * and one for forward iterators.
@@ -143,7 +143,9 @@ class standard_pivoting_strategy
                         PerformanceStats &performance_stats,
                         std::bidirectional_iterator_tag) const
     {
+
         // Attention: read "NOTE" above.
+        //
         if (length_of_sequence == 0)
         {
             return begin;
@@ -153,7 +155,7 @@ class standard_pivoting_strategy
         std::advance(pivot_position_1, length_of_sequence / 2);
         Iterator pivot_position_2 = pivot_position_1;
 
-        // This is all a little hoky: for even number of elements, the
+        // This is all a little hoky: for an even number of elements, the
         // first iteration through the loop below performs the same test
         // twice. It's all about ensuring that the line
         //
@@ -220,10 +222,15 @@ class standard_pivoting_strategy
         int element_count = 0;
         bool on_or_past_midpoint = false;
 
+        // Attention: read "NOTE" above.
+        //
+        if (length_of_sequence == 0)
+        {
+            return begin;
+        }
+
         // Find the pivot candidate (that is, an element that's strictly between
         // the bounds) that's closest to the midpoint.
-        //
-        // Attention: read "NOTE" above.
         //
         for (Iterator run = begin; run != end; ++run)
         {
@@ -279,12 +286,9 @@ class standard_pivoting_strategy
     }
 };
 
-/*
+/**
 * Pivoting strategy for random (non-sorted) data: use the first
 * suitable candidate.
-*
-* NOTE: This should be used only when just forward iterators are
-* available.
 */
 class pivoting_strategy_for_random_data
 {
@@ -318,7 +322,7 @@ class pivoting_strategy_for_random_data
     }
 };
 
-/*
+/**
 * Counts the number of elements less than, greater than, and equal to a given element in the sequence
 * [begin, end).
 */
@@ -350,7 +354,7 @@ std::tuple<int, int, int> count_elements(Iterator begin,
     return std::tuple<int, int, int>(less_than_count, equal_to_count, greater_than_count);
 }
 
-/*
+/**
 * The functions read_only_non_numerical_quick_median and
 * read_only_non_numerical_quick_median_random_data forward to this "internal"
 * function.
@@ -429,7 +433,7 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_internal(Iter
                                                                              median_upper_bound_found,
                                                                              median_upper_bound,
                                                                              performance_stats);
-        //
+
         // Trim the sequence at the end.
         //
         std::tuple<Iterator, int, int> trim_right_result =
@@ -440,7 +444,7 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_internal(Iter
                                 median_upper_bound,
                                 performance_stats,
                                 typename std::iterator_traits<Iterator>::iterator_category());
-        //
+
         active_sequence_begin = std::get<0>(trim_left_result);
         active_sequence_end = std::get<0>(trim_right_result);
         num_discarded_elements_less_than_or_equal_to_median_lower_bound +=
@@ -448,13 +452,15 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_internal(Iter
         num_discarded_elements_greater_than_or_equal_to_median_upper_bound +=
             (std::get<2>(trim_left_result) + std::get<2>(trim_right_result));
 
-        // Select a pivot and count the number of elements less than, equal to, and greater
-        // than pivot in the subsequence [run, end).
-        //
-        // NOTE: The argument total_length_of_sequence is actually 0 during the
-        // first iteration. That's fine. It just means that the first pivot is
-        // the first element of the sequence.
-        //
+        /*
+         * Select a pivot and count the number of elements less than, equal to, and greater
+         * than pivot in the subsequence [run, end).
+         *
+         * NOTE: The argument total_length_of_sequence is actually 0 during the
+         * first iteration. That's fine. It just means that the first pivot is
+         * the first element of the sequence.
+         */
+
         Iterator pivot_pos = pivoting_strategy(active_sequence_begin,
                                                active_sequence_end,
                                                median_lower_bound_found,
@@ -466,10 +472,10 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_internal(Iter
                                                    num_discarded_elements_greater_than_or_equal_to_median_upper_bound,
                                                performance_stats,
                                                typename std::iterator_traits<Iterator>::iterator_category());
-        //
+
         std::tuple<int, int, int> element_counts =
             count_elements(active_sequence_begin, active_sequence_end, *pivot_pos, performance_stats);
-        //
+
         int num_elements_less_than_pivot =
             std::get<0>(element_counts) + num_discarded_elements_less_than_or_equal_to_median_lower_bound;
         int num_elements_equal_to_pivot = std::get<1>(element_counts);
@@ -491,10 +497,11 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_internal(Iter
                    num_elements_less_than_pivot + num_elements_equal_to_pivot + num_elements_greater_than_pivot);
         }
 
-        //
-        // Check what we found: new lower bound, new upper bound, median position, left or right endpoint of median
-        // interval.
-        //
+        /*
+         * Check what we found: new lower bound, new upper bound, median position, left or right endpoint of
+         * median
+         * interval.
+         */
 
         // Too many elements above pivot: new lower bound found.
         //
@@ -537,8 +544,8 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_internal(Iter
                     median_interval_left_endpoint_pos = pivot_pos;
                     median_interval_left_endpoint_found = true;
 
-                    // We may have to continue in search of the other median interval endpoint, so also record this as a
-                    // lower bound.
+                    // We may have to continue in search of the other median interval endpoint, so also record
+                    // this as a lower bound.
                     median_lower_bound_found = true;
                     median_lower_bound = *pivot_pos;
                 }
@@ -553,8 +560,8 @@ std::pair<Iterator, Iterator> read_only_non_numerical_quick_median_internal(Iter
                     median_interval_right_endpoint_pos = pivot_pos;
                     median_interval_right_endpoint_found = true;
 
-                    // We may have to continue in search of the other median interval endpoint, so also record this as
-                    // an upper bound.
+                    // We may have to continue in search of the other median interval endpoint, so also record
+                    // this as an upper bound.
                     median_upper_bound_found = true;
                     median_upper_bound = *pivot_pos;
                 }

@@ -20,9 +20,8 @@
  * number of elements, it is the median converted to a double. For an even number of
  * elements, it is the mean of the left and right endpoint of the median interval.
  *
- * A brief description of the algorithm can be found at lines 245 - 270 of the implementation
- * file "read_only_numerical_quick_median_detail.hpp". There will soon be an article
- * on my personal web site with more details about background, context, existing work, etc.
+ * A brief description of the algorithm can be found at lines 195 - 219 of the implementation
+ * file "read_only_numerical_quick_median_detail.hpp".
  */
 
 #include "read_only_numerical_quick_median_detail.hpp"
@@ -31,7 +30,7 @@
 namespace median_project
 {
 
-/*
+/**
  * Function read_only_numerical_quick_median
  * ==============================================
  *
