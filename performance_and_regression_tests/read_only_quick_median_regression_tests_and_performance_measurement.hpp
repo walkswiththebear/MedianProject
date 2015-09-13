@@ -3,8 +3,8 @@
 
 #pragma once
 #include <cmath>
-#include "read_only_non_numerical_quick_median.hpp"
-#include "read_only_numerical_quick_median.hpp"
+#include "median_algorithms/read_only_non_numerical_quick_median.hpp"
+#include "median_algorithms/read_only_numerical_quick_median.hpp"
 using namespace median_project;
 
 /*

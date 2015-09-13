@@ -36,8 +36,8 @@
  * file "read_only_non_numerical_quick_median_detail.hpp".
  */
 
-#include "read_only_non_numerical_quick_median_detail.hpp"
-#include "no_op_median_performance_stats.hpp"
+#include "detail/read_only_non_numerical_quick_median_detail.hpp"
+#include "detail/no_op_median_performance_stats.hpp"
 
 namespace median_project
 {
