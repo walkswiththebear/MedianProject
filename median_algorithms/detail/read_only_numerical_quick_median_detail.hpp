@@ -10,6 +10,7 @@
  * Implementation details for read-only numerical median algorithms.
  */
 
+#include <algorithm>
 #include <tuple>
 #include <limits>
 #include <assert.h>
