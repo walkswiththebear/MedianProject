@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="median_algorithms">
+      <UniqueIdentifier>{c58ae678-a1f9-4c46-af82-df4a574d590b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="median_algorithms\detail">
+      <UniqueIdentifier>{bf20cee3-929a-4d93-959f-ba4fb408bed9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="performance_and_regression_tests">
+      <UniqueIdentifier>{b6755c38-e09b-4984-a295-c56846179c41}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="performance_and_regression_tests\include">
+      <UniqueIdentifier>{8170fb33-6e0f-4753-9aa0-628cb0ed88db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="performance_and_regression_tests\include\any_iterator">
+      <UniqueIdentifier>{441a5db1-8410-4c4f-9ebf-c9915d8aa901}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="performance_and_regression_tests\include\any_iterator\detail">
+      <UniqueIdentifier>{d07b80ea-7c6b-452d-9c4f-38f92b779555}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\median_algorithms\read_only_non_numerical_quick_median.hpp">
+      <Filter>median_algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\median_algorithms\read_only_numerical_quick_median.hpp">
+      <Filter>median_algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\median_algorithms\detail\no_op_median_performance_stats.hpp">
+      <Filter>median_algorithms\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\median_algorithms\detail\read_only_non_numerical_quick_median_detail.hpp">
+      <Filter>median_algorithms\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\median_algorithms\detail\read_only_numerical_quick_median_detail.hpp">
+      <Filter>median_algorithms\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\read_only_quick_median_regression_tests_and_performance_measurement.hpp">
+      <Filter>performance_and_regression_tests</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\any_iterator\any_iterator.hpp">
+      <Filter>performance_and_regression_tests\include\any_iterator</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\any_iterator\detail\any_iterator_abstract_base.hpp">
+      <Filter>performance_and_regression_tests\include\any_iterator\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\any_iterator\detail\any_iterator_metafunctions.hpp">
+      <Filter>performance_and_regression_tests\include\any_iterator\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\include\any_iterator\detail\any_iterator_wrapper.hpp">
+      <Filter>performance_and_regression_tests\include\any_iterator\detail</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\main.cpp">
+      <Filter>performance_and_regression_tests</Filter>
+    </ClCompile>
+    <ClCompile Include="..\read_only_quick_median_regression_tests_and_performance_measurement.cpp">
+      <Filter>performance_and_regression_tests</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
