@@ -121,9 +121,13 @@ trim_sequence_right(Iterator active_sequence_end,
 /**
 * Standard pivoting strategy: pick a random element in the active
 * sequence, then from there, look for the nearest element that lies
-* strictly between the current minimum and maximum. There is a 
-* version for bidirectional iterators or better, and one for forward 
-* iterators.
+* strictly between the current minimum and maximum. Note that the
+* "midpoint pivot choice" that many quicksort implementations use
+* is not really an option here because we don't have the possible
+* pivots in an interval. They're scattered all over the sequence.
+*
+* There is a version for bidirectional iterators or better, and one for 
+* forward iterators.
 * 
 * NOTE: The first call to the pivoting strategy will be made with
 * an incorrect value of length_of_sequence, namely, 0. We just return
