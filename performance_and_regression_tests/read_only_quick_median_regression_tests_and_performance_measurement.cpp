@@ -11,38 +11,38 @@
 
 void read_only_quick_median_regression_tests_and_performance_measurement::run_tests()
 {
-    std::cout << "Testing read_only_non_numerical_quick_median for (mostly) random access iterators\n";
-    std::cout << "=================================================================================\n\n";
+    std::cout << "Testing read_only_quick_median for (mostly) random access iterators\n";
+    std::cout << "===================================================================\n\n";
     m_which_algorithm = 0;
     test_algorithm();
 
     std::cout << "\n";
-    std::cout << "Testing read_only_non_numerical_quick_median for bidirectional iterators\n";
-    std::cout << "========================================================================\n\n";
+    std::cout << "Testing read_only_quick_median for bidirectional iterators\n";
+    std::cout << "==========================================================\n\n";
     m_which_algorithm = 1;
     test_algorithm();
 
     std::cout << "\n";
-    std::cout << "Testing read_only_non_numerical_quick_median for forward iterators\n";
-    std::cout << "==================================================================\n\n";
+    std::cout << "Testing read_only_quick_median for forward iterators\n";
+    std::cout << "====================================================\n\n";
     m_which_algorithm = 2;
     test_algorithm();
 
     std::cout << "\n";
-    std::cout << "Testing read_only_non_numerical_quick_median_random_data\n";
-    std::cout << "========================================================\n\n";
+    std::cout << "Testing read_only_quick_median_random_data\n";
+    std::cout << "==========================================\n\n";
     m_which_algorithm = 3;
     test_algorithm();
 
     std::cout << "\n";
-    std::cout << "Testing read_only_non_numerical_quick_median_random_data for bidirectional iterators\n";
-    std::cout << "====================================================================================\n\n";
+    std::cout << "Testing read_only_quick_median_random_data for bidirectional iterators\n";
+    std::cout << "======================================================================\n\n";
     m_which_algorithm = 4;
     test_algorithm();
 
     std::cout << "\n";
-    std::cout << "Testing read_only_non_numerical_quick_median_random_data for forward iterators\n";
-    std::cout << "==============================================================================\n\n";
+    std::cout << "Testing read_only_quick_median_random_data for forward iterators\n";
+    std::cout << "================================================================\n\n";
     m_which_algorithm = 5;
     test_algorithm();
 
@@ -70,10 +70,10 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
     if (m_which_algorithm == 0)
     {
         std::pair<Iterator, Iterator> median_pos_pair =
-            read_only_non_numerical_quick_median_detail::read_only_non_numerical_quick_median_internal(
+            read_only_quick_median_detail::read_only_quick_median_internal(
                 begin,
                 end,
-                read_only_non_numerical_quick_median_detail::standard_pivoting_strategy(begin, end),
+                read_only_quick_median_detail::standard_pivoting_strategy(begin, end),
                 performance_stats);
 
         return (*std::get<0>(median_pos_pair) + *std::get<1>(median_pos_pair)) / 2.0;
@@ -81,10 +81,10 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
     else if (m_which_algorithm == 1)
     {
         std::pair<bidirectional_it, bidirectional_it> median_pos_pair =
-            read_only_non_numerical_quick_median_detail::read_only_non_numerical_quick_median_internal(
+            read_only_quick_median_detail::read_only_quick_median_internal(
                 bidirectional_it(begin),
                 bidirectional_it(end),
-                read_only_non_numerical_quick_median_detail::standard_pivoting_strategy(begin, end),
+                read_only_quick_median_detail::standard_pivoting_strategy(begin, end),
                 performance_stats);
 
         return (*std::get<0>(median_pos_pair) + *std::get<1>(median_pos_pair)) / 2.0;
@@ -92,10 +92,10 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
     else if (m_which_algorithm == 2)
     {
         std::pair<forward_it, forward_it> median_pos_pair =
-            read_only_non_numerical_quick_median_detail::read_only_non_numerical_quick_median_internal(
+            read_only_quick_median_detail::read_only_quick_median_internal(
                 forward_it(begin),
                 forward_it(end),
-                read_only_non_numerical_quick_median_detail::standard_pivoting_strategy(begin, end),
+                read_only_quick_median_detail::standard_pivoting_strategy(begin, end),
                 performance_stats);
 
         return (*std::get<0>(median_pos_pair) + *std::get<1>(median_pos_pair)) / 2.0;
@@ -103,10 +103,10 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
     else if (m_which_algorithm == 3)
     {
         std::pair<Iterator, Iterator> median_pos_pair =
-            read_only_non_numerical_quick_median_detail::read_only_non_numerical_quick_median_internal(
+            read_only_quick_median_detail::read_only_quick_median_internal(
                 begin,
                 end,
-                read_only_non_numerical_quick_median_detail::pivoting_strategy_for_random_data(),
+                read_only_quick_median_detail::pivoting_strategy_for_random_data(),
                 performance_stats);
 
         return (*std::get<0>(median_pos_pair) + *std::get<1>(median_pos_pair)) / 2.0;
@@ -114,10 +114,10 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
     else if (m_which_algorithm == 4)
     {
         std::pair<bidirectional_it, bidirectional_it> median_pos_pair =
-            read_only_non_numerical_quick_median_detail::read_only_non_numerical_quick_median_internal(
+            read_only_quick_median_detail::read_only_quick_median_internal(
                 bidirectional_it(begin),
                 bidirectional_it(end),
-                read_only_non_numerical_quick_median_detail::pivoting_strategy_for_random_data(),
+                read_only_quick_median_detail::pivoting_strategy_for_random_data(),
                 performance_stats);
 
         return (*std::get<0>(median_pos_pair) + *std::get<1>(median_pos_pair)) / 2.0;
@@ -125,10 +125,10 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
     else if (m_which_algorithm == 5)
     {
         std::pair<forward_it, forward_it> median_pos_pair =
-            read_only_non_numerical_quick_median_detail::read_only_non_numerical_quick_median_internal(
+            read_only_quick_median_detail::read_only_quick_median_internal(
                 forward_it(begin),
                 forward_it(end),
-                read_only_non_numerical_quick_median_detail::pivoting_strategy_for_random_data(),
+                read_only_quick_median_detail::pivoting_strategy_for_random_data(),
                 performance_stats);
 
         return (*std::get<0>(median_pos_pair) + *std::get<1>(median_pos_pair)) / 2.0;

@@ -21,16 +21,10 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\median_algorithms\read_only_non_numerical_quick_median.hpp">
-      <Filter>median_algorithms</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\median_algorithms\read_only_numerical_quick_median.hpp">
       <Filter>median_algorithms</Filter>
     </ClInclude>
     <ClInclude Include="..\..\median_algorithms\detail\no_op_median_performance_stats.hpp">
-      <Filter>median_algorithms\detail</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\median_algorithms\detail\read_only_non_numerical_quick_median_detail.hpp">
       <Filter>median_algorithms\detail</Filter>
     </ClInclude>
     <ClInclude Include="..\..\median_algorithms\detail\read_only_numerical_quick_median_detail.hpp">
@@ -50,6 +44,12 @@
     </ClInclude>
     <ClInclude Include="..\include\any_iterator\detail\any_iterator_wrapper.hpp">
       <Filter>performance_and_regression_tests\include\any_iterator\detail</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\median_algorithms\read_only_quick_median.hpp">
+      <Filter>median_algorithms</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\median_algorithms\detail\read_only_quick_median_detail.hpp">
+      <Filter>median_algorithms\detail</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

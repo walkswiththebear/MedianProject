@@ -216,7 +216,7 @@ double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, P
      * comes to selecting a pivot.
      *
      * The description above is identical to the one that we gave for the non-numerical
-     * case. The additional optimization here (that is, in the numerical case), is this:
+     * case. What's different here (that is, in the numerical case), is this:
      * instead of selecting a pivot from the available elements between the current
      * lower and upper bound, we *calculate* a pivot, namely, as the mean of the current
      * lower and upper bound. This reflects the assumption that the median won't be too

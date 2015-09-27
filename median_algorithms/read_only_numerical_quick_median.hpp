@@ -15,6 +15,20 @@
  * whose type is the value type of the sequence, the function static_cast<double>(x)
  * must define and order-preserving embedding from the sequence values into the reals.
  *
+ * The difference between this algorithm and the corresponding general algorithm
+ * read_only_quick_median is that this algorithm calculates the "pivot",
+ * that is, the next element to be considered as a median candidate, from the current
+ * lower and upper bound for the median. This means that whether or not the worst case
+ * performance is hit does not depend on the ordering of the elements in the sequence,
+ * but on their numerical distribution. This can be advantageous, mostly so when it is
+ * known that the distribution is uniform. It can also be treacherous: the worst case
+ * or near worst case happens when the distribution is rather one-sided, e.g., it is 
+ * exponential. This means that hitting the worst case performance is not per se
+ * unlikely, as it is with the random pivot choice. Therefore, using this algorithm
+ * requires discretion in the sense that one must have knowledge or make conjectures
+ * about the distribution of the elements of the sequence.
+ *
+ *
  * Arguments are begin and end iterators to the data. These do not  have to be better
  * than forward iterators. The return value is a double. For an uneven
  * number of elements, it is the median converted to a double. For an even number of
