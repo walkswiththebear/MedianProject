@@ -205,6 +205,7 @@ class read_only_quick_median_regression_tests_and_performance_measurement
 
     // Internal helper functions
     //
+    static void test_top_level_algorithms();
     static void test_algorithm();
     static void run_white_box_tests();
     template <typename Iterator> static void run_a_few_shuffles(Iterator begin, Iterator end);

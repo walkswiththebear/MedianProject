@@ -11,6 +11,10 @@
 
 void read_only_quick_median_regression_tests_and_performance_measurement::run_tests()
 {
+    std::cout << "Testing top level algorithms\n";
+    std::cout << "============================\n\n";
+    test_top_level_algorithms();
+
     std::cout << "Testing read_only_quick_median for (mostly) random access iterators\n";
     std::cout << "===================================================================\n\n";
     m_which_algorithm = 0;
@@ -55,6 +59,29 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_te
     std::cout << m_check_true_count << " tests performed.\n";
 }
 
+void read_only_quick_median_regression_tests_and_performance_measurement::test_top_level_algorithms()
+{
+    std::vector<double> vec = std::vector<double>{ 7., 6., 5., 4., 3., 2., 1. };
+    
+    std::cout << "Testing read_only_quick_median...";
+    std::pair<std::vector<double>::const_iterator, std::vector<double>::const_iterator> median_pair = 
+        read_only_quick_median(vec.cbegin(), vec.cend());
+    check_true(*median_pair.first == 4.0);
+    check_true(*median_pair.second == 4.0);
+    std::cout << "done.\n";
+    
+    std::cout << "Testing read_only_quick_median_random_data...";
+    median_pair =
+        read_only_quick_median_random_data(vec.cbegin(), vec.cend());
+    check_true(*median_pair.first == 4.0);
+    check_true(*median_pair.second == 4.0);
+    std::cout << "done.\n";
+
+    std::cout << "Testing read_only_numerical_quick_median...";
+    check_true(read_only_numerical_quick_median(vec.cbegin(), vec.cend()) == 4.0);
+    std::cout << "done.\n\n";
+}
+
 template <typename Iterator, typename PerformanceStats>
 typename std::iterator_traits<Iterator>::value_type
 read_only_quick_median_regression_tests_and_performance_measurement::tested_algorithm(
@@ -73,7 +100,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
             read_only_quick_median_detail::read_only_quick_median_internal(
                 begin,
                 end,
-                read_only_quick_median_detail::standard_pivoting_strategy(begin, end),
+                read_only_quick_median_detail::standard_pivoting_strategy(),
                 performance_stats);
 
         return (*std::get<0>(median_pos_pair) + *std::get<1>(median_pos_pair)) / 2.0;
@@ -84,7 +111,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
             read_only_quick_median_detail::read_only_quick_median_internal(
                 bidirectional_it(begin),
                 bidirectional_it(end),
-                read_only_quick_median_detail::standard_pivoting_strategy(begin, end),
+                read_only_quick_median_detail::standard_pivoting_strategy(),
                 performance_stats);
 
         return (*std::get<0>(median_pos_pair) + *std::get<1>(median_pos_pair)) / 2.0;
@@ -95,7 +122,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
             read_only_quick_median_detail::read_only_quick_median_internal(
                 forward_it(begin),
                 forward_it(end),
-                read_only_quick_median_detail::standard_pivoting_strategy(begin, end),
+                read_only_quick_median_detail::standard_pivoting_strategy(),
                 performance_stats);
 
         return (*std::get<0>(median_pos_pair) + *std::get<1>(median_pos_pair)) / 2.0;

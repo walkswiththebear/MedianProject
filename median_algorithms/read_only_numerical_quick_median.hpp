@@ -46,14 +46,14 @@ namespace median_project
 
 /**
  * Function read_only_numerical_quick_median
- * ==============================================
+ * =========================================
  *
  * Non-modifying median algorithm for numerical data in average N * log(N) time.
  * Iterators need to be forward or better.
  *
  */
 template <typename Iterator>
-std::pair<Iterator, Iterator> read_only_numerical_quick_median(Iterator begin, Iterator end)
+double read_only_numerical_quick_median(Iterator begin, Iterator end)
 {
     no_op_median_performance_stats performance_stats;
     return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(

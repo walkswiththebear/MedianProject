@@ -12,6 +12,7 @@
 
 #include <tuple>
 #include <random>
+#include <limits>
 #include <assert.h>
 
 namespace median_project
@@ -137,20 +138,12 @@ class standard_pivoting_strategy
 {
 public:
 
-    /*
-     * Constructor from begin and end iterator of sequence. The iterators
-     * are needed only to determine the length of the sequence. If the 
-     * length of the sequence is known, and the iterators are not random
-     * access, it is better to use the constructor from the length of the
-     * sequence.
+    /**
+     * Constructor. Initializes the random number generation
      */
-    template <typename Iterator>
-    standard_pivoting_strategy(Iterator begin, Iterator end) :
-        standard_pivoting_strategy(std::distance(begin, end)){}
-
-    standard_pivoting_strategy(int total_length_of_sequence) :
+    standard_pivoting_strategy() :
         m_generator(std::random_device()()),
-        m_pivot_position_generator(0, total_length_of_sequence - 1){
+        m_pivot_position_generator(0, std::numeric_limits<int>::max()){
     }
 
     /*
@@ -248,7 +241,7 @@ public:
 
         // Attention: read "NOTE" above.
         //  
-        if (length_of_sequence == 0)
+        if (length_of_sequence == 0 || length_of_sequence == 1)
         {
             return begin;
         }
@@ -280,11 +273,13 @@ public:
 
                 if (on_or_past_desired_pivot_index)
                 {
+                    ++num_steps_past_desired_pivot_index;
+
                     if (num_steps_past_last_pivot_candidate >= 0)
                     {
                         ++num_steps_past_last_pivot_candidate;
                     }
-
+                    
                     if (num_steps_past_last_pivot_candidate == -1 ||
                         num_steps_past_desired_pivot_index <= num_steps_past_last_pivot_candidate)
                     {

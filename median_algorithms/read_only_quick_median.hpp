@@ -61,7 +61,7 @@ std::pair<Iterator, Iterator> read_only_quick_median(Iterator begin, Iterator en
 {
     no_op_median_performance_stats performance_stats;
     return read_only_quick_median_detail::read_only_quick_median_internal(
-        begin, end, read_only_quick_median_detail::standard_pivoting_strategy(begin, end), performance_stats);
+        begin, end, read_only_quick_median_detail::standard_pivoting_strategy(), performance_stats);
 }
 
 /**
