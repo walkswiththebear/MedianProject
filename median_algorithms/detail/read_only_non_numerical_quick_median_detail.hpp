@@ -11,6 +11,7 @@
  */
 
 #include <tuple>
+#include <random>
 #include <assert.h>
 
 namespace median_project
@@ -118,20 +119,43 @@ trim_sequence_right(Iterator active_sequence_end,
 }
 
 /**
-* Standard pivoting strategy: look for a pivot near the middle of the
-* sequence. There is a version for bidirectional iterators or better,
-* and one for forward iterators.
-*
-* NOTE: For the first pivot selection, this functor will be called with
-* the "erroneos" value of 0 for the total sequence length. That's fine.
-* It just means that the first pivot will be the first element of the
-* sequence.
+* Standard pivoting strategy: pick a random element in the active
+* sequence, then from there, look for the nearest element that lies
+* strictly between the current minimum and maximum. There is a 
+* version for bidirectional iterators or better, and one for forward 
+* iterators.
+* 
+* NOTE: The first call to the pivoting strategy will be made with
+* an incorrect value of length_of_sequence, namely, 0. We just return
+* the first element of the sequence in that case.
 */
 class standard_pivoting_strategy
 {
-  public:
-    // Version for bidirectional iterator or better.
-    //
+public:
+
+    /*
+     * Constructor from begin and end iterator of sequence. The iterators
+     * are needed only to determine the length of the sequence. If the 
+     * length of the sequence is known, and the iterators are not random
+     * access, it is better to use the constructor from the length of the
+     * sequence.
+     */
+    template <typename Iterator>
+    standard_pivoting_strategy(Iterator begin, Iterator end) :
+        standard_pivoting_strategy(std::distance(begin, end)){}
+
+    standard_pivoting_strategy(int total_length_of_sequence) :
+        m_generator(std::random_device()()),
+        m_pivot_position_generator(0, total_length_of_sequence - 1){
+    }
+
+    /*
+     * Version for bidirectional iterator or better.
+     *
+     * NOTE: The first call to the pivoting strategy will be made with
+     * an incorrect value of length_of_sequence, namely, 0. We just return
+     * the first element of the sequence in that case.
+     */
     template <typename Iterator, typename PerformanceStats>
     Iterator operator()(Iterator begin,
                         Iterator end,
@@ -141,70 +165,66 @@ class standard_pivoting_strategy
                         typename std::iterator_traits<Iterator>::value_type upper_bound,
                         int length_of_sequence,
                         PerformanceStats &performance_stats,
-                        std::bidirectional_iterator_tag) const
+                        std::bidirectional_iterator_tag) 
     {
 
-        // Attention: read "NOTE" above.
+        // Attention: read NOTE above.
         //
-        if (length_of_sequence == 0)
+        if (length_of_sequence == 0 || length_of_sequence == 1)
         {
             return begin;
         }
 
-        Iterator pivot_position_1 = begin;
-        std::advance(pivot_position_1, length_of_sequence / 2);
-        Iterator pivot_position_2 = pivot_position_1;
-
-        // This is all a little hoky: for an even number of elements, the
-        // first iteration through the loop below performs the same test
-        // twice. It's all about ensuring that the line
-        //
-        // --pivot_position_1;
-        //
-        // does not get executed when pivot_position_1 equals begin. That's
-        // actually also guaranteed by the trimming of the sequence in the
-        // main loop of the algorithm. Perhaps we should use a reverse
-        // iterator here. Anyway, not all that important I guess...
-        //
-        if (length_of_sequence % 2 == 1)
-        {
-            ++pivot_position_2;
-        }
+        std::reverse_iterator<Iterator> reverse_end(begin);
+        int pivot_search_start_index = m_pivot_position_generator(m_generator) % length_of_sequence;
+        Iterator pivot_position_locator_forward = begin;
+        std::advance(pivot_position_locator_forward, pivot_search_start_index);
+        std::reverse_iterator<Iterator> pivot_position_locator_backward(pivot_position_locator_forward);
 
         // Find the pivot candidate (that is, an element that's strictly between
         // the bounds) that's closest to the midpoint.
         //
         while (true)
         {
-            if ((lower_bound_found && *pivot_position_1 <= lower_bound) ||
-                (upper_bound_found && *pivot_position_1 >= upper_bound))
+            if (pivot_position_locator_forward != end)
             {
-                performance_stats.add_comparisons(1);
-                assert(pivot_position_1 != begin);
-                --pivot_position_1;
-            }
-            else
-            {
-                performance_stats.add_comparisons(2);
-                return pivot_position_1;
+                if ((lower_bound_found && *pivot_position_locator_forward <= lower_bound) ||
+                    (upper_bound_found && *pivot_position_locator_forward >= upper_bound))
+                {
+                    performance_stats.add_comparisons(1);
+                    ++pivot_position_locator_forward;
+                }
+                else
+                {
+                    performance_stats.add_comparisons(2);
+                    return pivot_position_locator_forward;
+                }
             }
 
-            if ((lower_bound_found && *pivot_position_2 <= lower_bound) ||
-                (upper_bound_found && *pivot_position_2 >= upper_bound))
+            if (pivot_position_locator_backward != reverse_end)
             {
-                performance_stats.add_comparisons(1);
-                ++pivot_position_2;
-            }
-            else
-            {
-                performance_stats.add_comparisons(2);
-                return pivot_position_2;
+                if ((lower_bound_found && *pivot_position_locator_backward <= lower_bound) ||
+                    (upper_bound_found && *pivot_position_locator_backward >= upper_bound))
+                {
+                    performance_stats.add_comparisons(1);
+                    --pivot_position_locator_backward;
+                }
+                else
+                {
+                    performance_stats.add_comparisons(2);
+                    return --pivot_position_locator_backward.base();
+                }
             }
         }
     }
 
-    // Version for forward iterators.
-    //
+    /*
+     * Version for forward iterators.
+     *
+     * NOTE: The first call to the pivoting strategy will be made with
+     * an incorrect value of length_of_sequence, namely, 0. We just return
+     * the first element of the sequence in that case.
+     */
     template <typename Iterator, typename PerformanceStats>
     Iterator operator()(Iterator begin,
                         Iterator end,
@@ -214,54 +234,57 @@ class standard_pivoting_strategy
                         typename std::iterator_traits<Iterator>::value_type upper_bound,
                         int length_of_sequence,
                         PerformanceStats &performance_stats,
-                        std::forward_iterator_tag) const
+                        std::forward_iterator_tag)
     {
         Iterator pivot_candiate_left = begin;
-        int num_steps_since_last_pivot_candidate_left = -1;
-        int num_steps_past_midpoint = 0;
-        int element_count = 0;
-        bool on_or_past_midpoint = false;
+        int num_steps_past_last_pivot_candidate = -1;
+        int num_steps_past_desired_pivot_index = -1;
+        int current_index = 0;
+        bool on_or_past_desired_pivot_index = false;
 
         // Attention: read "NOTE" above.
-        //
+        //  
         if (length_of_sequence == 0)
         {
             return begin;
         }
 
+        // Here, using a random index seems to perform noticeably worse than
+        // always starting the search in the middle of the sequence.
+        int desired_pivot_index = length_of_sequence / 2;
+
         // Find the pivot candidate (that is, an element that's strictly between
-        // the bounds) that's closest to the midpoint.
+        // the bounds) that's closest to the desired index.
         //
-        for (Iterator run = begin; run != end; ++run)
+        for (Iterator run = begin; run != end; ++run, ++current_index)
         {
-            ++element_count;
-            on_or_past_midpoint = element_count > length_of_sequence / 2;
+            on_or_past_desired_pivot_index = current_index >= desired_pivot_index;
 
             if ((lower_bound_found && *run <= lower_bound) || (upper_bound_found && *run >= upper_bound))
             {
                 performance_stats.add_comparisons(1);
-                if (on_or_past_midpoint)
+                if (on_or_past_desired_pivot_index)
                 {
-                    ++num_steps_past_midpoint;
+                    ++num_steps_past_desired_pivot_index;
                 }
-                else if (num_steps_since_last_pivot_candidate_left >= 0)
+                else if (num_steps_past_last_pivot_candidate >= 0)
                 {
-                    ++num_steps_since_last_pivot_candidate_left;
+                    ++num_steps_past_last_pivot_candidate;
                 }
             }
             else
             {
                 performance_stats.add_comparisons(1);
 
-                if (on_or_past_midpoint)
+                if (on_or_past_desired_pivot_index)
                 {
-                    if (num_steps_since_last_pivot_candidate_left >= 0)
+                    if (num_steps_past_last_pivot_candidate >= 0)
                     {
-                        ++num_steps_since_last_pivot_candidate_left;
+                        ++num_steps_past_last_pivot_candidate;
                     }
 
-                    if (num_steps_since_last_pivot_candidate_left == -1 ||
-                        num_steps_past_midpoint <= num_steps_since_last_pivot_candidate_left)
+                    if (num_steps_past_last_pivot_candidate == -1 ||
+                        num_steps_past_desired_pivot_index <= num_steps_past_last_pivot_candidate)
                     {
                         return run;
                     }
@@ -273,7 +296,7 @@ class standard_pivoting_strategy
                 else
                 {
                     pivot_candiate_left = run;
-                    num_steps_since_last_pivot_candidate_left = 0;
+                    num_steps_past_last_pivot_candidate = 0;
                 }
             }
         }
@@ -284,6 +307,10 @@ class standard_pivoting_strategy
         //
         return pivot_candiate_left;
     }
+
+    private:
+        std::mt19937 m_generator;
+        std::uniform_int_distribution<> m_pivot_position_generator;
 };
 
 /**
