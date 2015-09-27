@@ -11,18 +11,18 @@
 
 void read_only_quick_median_regression_tests_and_performance_measurement::run_tests()
 {
-/*    std::cout << "Testing read_only_non_numerical_quick_median for (mostly) random access iterators\n";
+    std::cout << "Testing read_only_non_numerical_quick_median for (mostly) random access iterators\n";
     std::cout << "=================================================================================\n\n";
     m_which_algorithm = 0;
     test_algorithm();
-*/
+
     std::cout << "\n";
     std::cout << "Testing read_only_non_numerical_quick_median for bidirectional iterators\n";
     std::cout << "========================================================================\n\n";
     m_which_algorithm = 1;
     test_algorithm();
 
-/*    std::cout << "\n";
+    std::cout << "\n";
     std::cout << "Testing read_only_non_numerical_quick_median for forward iterators\n";
     std::cout << "==================================================================\n\n";
     m_which_algorithm = 2;
@@ -51,7 +51,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_te
     std::cout << "========================================\n\n";
     m_which_algorithm = 6;
     test_algorithm();
-*/
+
     std::cout << m_check_true_count << " tests performed.\n";
 }
 

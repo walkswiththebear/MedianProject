@@ -249,9 +249,7 @@ public:
             return begin;
         }
 
-        // Here, using a random index seems to perform noticeably worse than
-        // always starting the search in the middle of the sequence.
-        int desired_pivot_index = length_of_sequence / 2;
+        int desired_pivot_index = m_pivot_position_generator(m_generator) % length_of_sequence;
 
         // Find the pivot candidate (that is, an element that's strictly between
         // the bounds) that's closest to the desired index.
