@@ -12,6 +12,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\median_algorithms\detail\no_op_median_performance_stats.hpp" />
+    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators.hpp" />
     <ClInclude Include="..\..\median_algorithms\detail\read_only_numerical_quick_median_detail.hpp" />
     <ClInclude Include="..\..\median_algorithms\detail\read_only_quick_median_detail.hpp" />
     <ClInclude Include="..\..\median_algorithms\read_only_numerical_quick_median.hpp" />

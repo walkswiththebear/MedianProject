@@ -39,6 +39,7 @@
  */
 
 #include "detail/read_only_numerical_quick_median_detail.hpp"
+#include "detail/pivot_calculators.hpp"
 #include "detail/no_op_median_performance_stats.hpp"
 
 namespace median_project
@@ -56,8 +57,9 @@ template <typename Iterator>
 double read_only_numerical_quick_median(Iterator begin, Iterator end)
 {
     no_op_median_performance_stats performance_stats;
+    read_only_numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
     return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
-        begin, end, performance_stats);
+        begin, end, pivot_calculator, performance_stats);
 }
 } // end namespace median_project
 

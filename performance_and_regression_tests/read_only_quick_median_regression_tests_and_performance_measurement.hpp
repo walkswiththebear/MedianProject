@@ -58,15 +58,16 @@ class read_only_quick_median_regression_tests_and_performance_measurement
             PivotingsStrategy pivoting_strategy,
             PerformanceStats &performance_stats);
 
-        template <typename Iterator, typename PerformanceStats>
+        template <typename Iterator, typename PivotCalculator, typename PerformanceStats>
         friend double read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
             Iterator begin,
-            Iterator end,
+            Iterator end, 
+            PivotCalculator pivot_calculator,
             PerformanceStats &performance_stats);
 
         template <typename Iterator, typename PerformanceStats>
-        friend std::tuple<double, double, int>
-        read_only_numerical_quick_median_detail::get_initial_sequence_data(Iterator begin,
+        friend std::tuple<int, double, double, double>
+            read_only_numerical_quick_median_detail::get_initial_sequence_data(Iterator begin,
                                                                            Iterator end,
                                                                            PerformanceStats &performance_stats);
 

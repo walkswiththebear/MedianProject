@@ -51,6 +51,9 @@
     <ClInclude Include="..\..\median_algorithms\detail\read_only_quick_median_detail.hpp">
       <Filter>median_algorithms\detail</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators.hpp">
+      <Filter>median_algorithms\detail</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\main.cpp">

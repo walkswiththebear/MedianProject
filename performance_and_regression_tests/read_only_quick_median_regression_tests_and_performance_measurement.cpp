@@ -49,7 +49,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_te
     std::cout << "================================================================\n\n";
     m_which_algorithm = 5;
     test_algorithm();
-
+    
     std::cout << "\n";
     std::cout << "Testing read_only_numerical_quick_median\n";
     std::cout << "========================================\n\n";
@@ -162,8 +162,9 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
     }
     else if (m_which_algorithm == 6)
     {
+        read_only_numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
         return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
-            begin, end, performance_stats);
+            begin, end, pivot_calculator, performance_stats);
     }
     else
     {

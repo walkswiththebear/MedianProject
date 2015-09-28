@@ -75,11 +75,11 @@ std::tuple<int, int, int> count_elements(Iterator begin,
 
 namespace read_only_numerical_quick_median_detail
 {
-template <typename Iterator, typename PerformanceStats>
-double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, PerformanceStats &performance_stats);
+template <typename Iterator, typename PivotCalculator, typename PerformanceStats>
+double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, PivotCalculator pivot_calculator, PerformanceStats &performance_stats);
 
 template <typename Iterator, typename PerformanceStats>
-std::tuple<double, double, int>
+std::tuple<int, double, double, double>
 get_initial_sequence_data(Iterator begin, Iterator end, PerformanceStats &performance_stats);
 
 template <typename Iterator, typename PerformanceStats>
@@ -163,15 +163,16 @@ class no_op_median_performance_stats
         typename std::iterator_traits<Iterator>::value_type pivot,
         PerformanceStats &performance_stats);
 
-    template <typename Iterator, typename PerformanceStats>
+    template <typename Iterator, typename PivotCalculator, typename PerformanceStats>
     friend double read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
         Iterator begin,
         Iterator end,
+        PivotCalculator pivot_calculator,
         PerformanceStats &performance_stats);
 
     template <typename Iterator, typename PerformanceStats>
-    friend std::tuple<double, double, int>
-    read_only_numerical_quick_median_detail::get_initial_sequence_data(Iterator begin,
+    friend std::tuple<int, double, double, double>
+        read_only_numerical_quick_median_detail::get_initial_sequence_data(Iterator begin,
                                                                        Iterator end,
                                                                        PerformanceStats &performance_stats);
 
