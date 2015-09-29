@@ -22,7 +22,7 @@
  * performance is hit does not depend on the ordering of the elements in the sequence,
  * but on their numerical distribution. This can be advantageous, mostly so when it is
  * known that the distribution is uniform. It can also be treacherous: the worst case
- * or near worst case happens when the distribution is rather one-sided, e.g., it is 
+ * or near worst case happens when the distribution is rather one-sided, e.g., it is
  * exponential. This means that hitting the worst case performance is not per se
  * unlikely, as it is with the random pivot choice. Therefore, using this algorithm
  * requires discretion in the sense that one must have knowledge or make conjectures
@@ -39,7 +39,7 @@
  */
 
 #include "detail/read_only_numerical_quick_median_detail.hpp"
-#include "detail/pivot_calculators.hpp"
+#include "detail/pivot_calculators/uniform_distribution_pivot.hpp"
 #include "detail/no_op_median_performance_stats.hpp"
 
 namespace median_project
@@ -53,8 +53,7 @@ namespace median_project
  * Iterators need to be forward or better.
  *
  */
-template <typename Iterator>
-double read_only_numerical_quick_median(Iterator begin, Iterator end)
+template <typename Iterator> double read_only_numerical_quick_median(Iterator begin, Iterator end)
 {
     no_op_median_performance_stats performance_stats;
     read_only_numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;

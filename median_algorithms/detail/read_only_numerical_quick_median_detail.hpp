@@ -21,32 +21,8 @@ namespace read_only_numerical_quick_median_detail
 {
 
 /**
- * Gets min, max, and length of the sequence.
-*/
-template <typename Iterator, typename PerformanceStats>
-std::tuple<int, double, double, double>
-get_initial_sequence_data(Iterator begin, Iterator end, PerformanceStats &performance_stats)
-{
-    assert(begin != end);
-    int length = 0;
-    double min_value = std::numeric_limits<double>::max();
-    double max_value = -std::numeric_limits<double>::max();
-    double mean = 0.0;
-    for (Iterator run = begin; run != end; ++run)
-    {
-        ++length;
-        min_value = std::min(min_value, static_cast<double>(*run));
-        max_value = std::max(max_value, static_cast<double>(*run));
-        mean = mean + (*run - mean) / static_cast<double>(length);
-    }
-
-    performance_stats.add_comparisons(2 * length);
-    return std::tuple<int, double, double, double>(length, min_value, max_value, mean);
-}
-
-/**
  * Calculates the mean of two doubles. Guards against overflow. If the calculated mean
- * lies outside of the interval (very small numbers!), it is set to the min or max of 
+ * lies outside of the interval (very small numbers!), it is set to the min or max of
  * the two numbers, as the case may be.
  */
 inline double mean(double x, double y)
@@ -191,7 +167,10 @@ count_elements(Iterator begin, Iterator end, double pivot, PerformanceStats &per
 * The function read_only_numerical_quick_median forwards to this "internal" function.
 */
 template <typename Iterator, typename PivotCalculator, typename PerformanceStats>
-double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, PivotCalculator pivot_calculator, PerformanceStats &performance_stats)
+double read_only_numerical_quick_median_internal(Iterator begin,
+                                                 Iterator end,
+                                                 PivotCalculator pivot_calculator,
+                                                 PerformanceStats &performance_stats)
 {
     if (begin == end)
     {
@@ -245,14 +224,11 @@ double read_only_numerical_quick_median_internal(Iterator begin, Iterator end, P
     int num_discarded_elements_less_than_median_lower_bound = 0;
     int num_discarded_elements_greater_than_median_upper_bound = 0;
 
-    // Calculate min, max, and length of sequence
-    std::tuple<int, double, double, double> initialSequenceData = get_initial_sequence_data(begin, end, performance_stats);
-    total_length_of_sequence = std::get<0>(initialSequenceData);
-    median_lower_bound = std::get<1>(initialSequenceData);
-    median_upper_bound = std::get<2>(initialSequenceData);
+    pivot_calculator.initialize(begin, end, performance_stats);
+    total_length_of_sequence = pivot_calculator.get_total_sequence_length();
+    median_lower_bound = pivot_calculator.get_total_sequence_min();
+    median_upper_bound = pivot_calculator.get_total_sequence_max();
     performance_stats.set_sequence_length(total_length_of_sequence);
-    double sequence_mean = std::get<3>(initialSequenceData);
-    pivot_calculator.initialize(total_length_of_sequence, median_lower_bound, median_upper_bound, sequence_mean);
 
     // Main loop for selecting and processing pivots.
     //

@@ -127,23 +127,23 @@ trim_sequence_right(Iterator active_sequence_end,
 * is not really an option here because we don't have the possible
 * pivots in an interval. They're scattered all over the sequence.
 *
-* There is a version for bidirectional iterators or better, and one for 
+* There is a version for bidirectional iterators or better, and one for
 * forward iterators.
-* 
+*
 * NOTE: The first call to the pivoting strategy will be made with
 * an incorrect value of length_of_sequence, namely, 0. We just return
 * the first element of the sequence in that case.
 */
 class standard_pivoting_strategy
 {
-public:
-
+  public:
     /**
      * Constructor. Initializes the random number generation
      */
-    standard_pivoting_strategy() :
-        m_generator(std::random_device()()),
-        m_pivot_position_generator(0, std::numeric_limits<int>::max()){
+    standard_pivoting_strategy()
+        : m_generator(std::random_device()())
+        , m_pivot_position_generator(0, std::numeric_limits<int>::max())
+    {
     }
 
     /*
@@ -162,7 +162,7 @@ public:
                         typename std::iterator_traits<Iterator>::value_type upper_bound,
                         int length_of_sequence,
                         PerformanceStats &performance_stats,
-                        std::bidirectional_iterator_tag) 
+                        std::bidirectional_iterator_tag)
     {
 
         // Attention: read NOTE above.
@@ -240,7 +240,7 @@ public:
         bool on_or_past_desired_pivot_index = false;
 
         // Attention: read "NOTE" above.
-        //  
+        //
         if (length_of_sequence == 0 || length_of_sequence == 1)
         {
             return begin;
@@ -279,7 +279,7 @@ public:
                     {
                         ++num_steps_past_last_pivot_candidate;
                     }
-                    
+
                     if (num_steps_past_last_pivot_candidate == -1 ||
                         num_steps_past_desired_pivot_index <= num_steps_past_last_pivot_candidate)
                     {
@@ -305,9 +305,9 @@ public:
         return pivot_candiate_left;
     }
 
-    private:
-        std::mt19937 m_generator;
-        std::uniform_int_distribution<> m_pivot_position_generator;
+  private:
+    std::mt19937 m_generator;
+    std::uniform_int_distribution<> m_pivot_position_generator;
 };
 
 /**
@@ -385,9 +385,9 @@ std::tuple<int, int, int> count_elements(Iterator begin,
 */
 template <typename Iterator, typename PivotingStrategy, typename PerformanceStats>
 std::pair<Iterator, Iterator> read_only_quick_median_internal(Iterator begin,
-                                                                            Iterator end,
-                                                                            PivotingStrategy pivoting_strategy,
-                                                                            PerformanceStats &performance_stats)
+                                                              Iterator end,
+                                                              PivotingStrategy pivoting_strategy,
+                                                              PerformanceStats &performance_stats)
 {
     typedef typename std::iterator_traits<Iterator>::value_type value_type;
 

@@ -52,22 +52,21 @@ class read_only_quick_median_regression_tests_and_performance_measurement
     {
         template <typename Iterator, typename PivotingsStrategy, typename PerformanceStats>
         friend typename std::pair<Iterator, Iterator>
-        read_only_quick_median_detail::read_only_quick_median_internal(
-            Iterator begin,
-            Iterator end,
-            PivotingsStrategy pivoting_strategy,
-            PerformanceStats &performance_stats);
+        read_only_quick_median_detail::read_only_quick_median_internal(Iterator begin,
+                                                                       Iterator end,
+                                                                       PivotingsStrategy pivoting_strategy,
+                                                                       PerformanceStats &performance_stats);
 
         template <typename Iterator, typename PivotCalculator, typename PerformanceStats>
         friend double read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
             Iterator begin,
-            Iterator end, 
+            Iterator end,
             PivotCalculator pivot_calculator,
             PerformanceStats &performance_stats);
 
         template <typename Iterator, typename PerformanceStats>
         friend std::tuple<int, double, double, double>
-            read_only_numerical_quick_median_detail::get_initial_sequence_data(Iterator begin,
+        read_only_numerical_quick_median_detail::get_initial_sequence_data(Iterator begin,
                                                                            Iterator end,
                                                                            PerformanceStats &performance_stats);
 
@@ -126,6 +125,8 @@ class read_only_quick_median_regression_tests_and_performance_measurement
         friend class read_only_quick_median_detail::standard_pivoting_strategy;
 
         friend class read_only_quick_median_detail::pivoting_strategy_for_random_data;
+
+        friend class read_only_numerical_quick_median_detail::pivot_functor_base;
 
         template <typename Iterator, typename PerformanceStats>
         friend std::tuple<int, int, int> read_only_quick_median_detail::count_elements(

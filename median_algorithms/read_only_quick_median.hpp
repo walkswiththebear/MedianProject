@@ -56,8 +56,7 @@ namespace median_project
  * hit caused by non-random-access iterators can be avoided by using the alternate
  * version read_only_quick_median_random_data.
  */
-template <typename Iterator>
-std::pair<Iterator, Iterator> read_only_quick_median(Iterator begin, Iterator end)
+template <typename Iterator> std::pair<Iterator, Iterator> read_only_quick_median(Iterator begin, Iterator end)
 {
     no_op_median_performance_stats performance_stats;
     return read_only_quick_median_detail::read_only_quick_median_internal(
@@ -68,10 +67,10 @@ std::pair<Iterator, Iterator> read_only_quick_median(Iterator begin, Iterator en
  * Function read_only_quick_median_random_data
  * =========================================================
  *
- * Non-modifying median algorithm for non-numerical and numerical data in average 
- * N * log(N) time. This version of the algorithm improves performance if the data is 
- * essentially the result of a random walk, that is, it has no particular likelihood 
- * of being sorted. This is true in particular when the iterators used are no better 
+ * Non-modifying median algorithm for non-numerical and numerical data in average
+ * N * log(N) time. This version of the algorithm improves performance if the data is
+ * essentially the result of a random walk, that is, it has no particular likelihood
+ * of being sorted. This is true in particular when the iterators used are no better
  * than forward iterators. For numerical data, consider using read_only_numerical_quick_median.
  *
  * IMPORTANT: For sorted data, the performance of this version of the algorithm will degrade
@@ -84,10 +83,7 @@ std::pair<Iterator, Iterator> read_only_quick_median_random_data(Iterator begin,
 {
     no_op_median_performance_stats performance_stats;
     return read_only_quick_median_detail::read_only_quick_median_internal(
-        begin,
-        end,
-        read_only_quick_median_detail::pivoting_strategy_for_random_data(),
-        performance_stats);
+        begin, end, read_only_quick_median_detail::pivoting_strategy_for_random_data(), performance_stats);
 }
 } // end namespace median_project
 
