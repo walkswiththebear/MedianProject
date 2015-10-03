@@ -61,7 +61,7 @@ class read_only_quick_median_regression_tests_and_performance_measurement
         friend double read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
             Iterator begin,
             Iterator end,
-            PivotCalculator pivot_calculator,
+            PivotCalculator &pivot_calculator,
             PerformanceStats &performance_stats);
 
         template <typename Iterator, typename PerformanceStats>
@@ -156,7 +156,7 @@ class read_only_quick_median_regression_tests_and_performance_measurement
                    (static_cast<double>(m_sequence_length) * std::log2(static_cast<double>(m_sequence_length)));
         }
 
-      private:
+      public:
         void set_sequence_length(int len)
         {
             m_sequence_length = len;
@@ -208,6 +208,7 @@ class read_only_quick_median_regression_tests_and_performance_measurement
     // Internal helper functions
     //
     static void test_top_level_algorithms();
+    static void test_numerical_median_for_distributions();
     static void test_algorithm();
     static void run_white_box_tests();
     template <typename Iterator> static void run_a_few_shuffles(Iterator begin, Iterator end);

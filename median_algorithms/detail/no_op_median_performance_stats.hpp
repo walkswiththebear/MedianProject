@@ -77,7 +77,7 @@ namespace read_only_numerical_quick_median_detail
 template <typename Iterator, typename PivotCalculator, typename PerformanceStats>
 double read_only_numerical_quick_median_internal(Iterator begin,
                                                  Iterator end,
-                                                 PivotCalculator pivot_calculator,
+                                                 PivotCalculator &pivot_calculator,
                                                  PerformanceStats &performance_stats);
 
 template <typename Iterator, typename PerformanceStats>
@@ -170,7 +170,7 @@ class no_op_median_performance_stats
     friend double read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
         Iterator begin,
         Iterator end,
-        PivotCalculator pivot_calculator,
+        PivotCalculator &pivot_calculator,
         PerformanceStats &performance_stats);
 
     template <typename Iterator, typename PerformanceStats>
@@ -214,7 +214,7 @@ class no_op_median_performance_stats
     // No-op methods
     // =============
 
-  private:
+  public:
     void set_sequence_length(int len)
     {
     }

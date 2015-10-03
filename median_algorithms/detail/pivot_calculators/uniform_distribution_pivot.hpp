@@ -27,7 +27,8 @@ class uniform_distribution_pivot : public pivot_functor_base
 
     double operator()(double median_lower_bound, double median_upper_bound) const override
     {
-        return median_lower_bound / 2.0 + median_upper_bound / 2.0;
+        double pivot = median_lower_bound / 2.0 + median_upper_bound / 2.0;
+        return std::min(median_upper_bound, std::max(pivot, median_lower_bound));
     }
 };
 } // end namespace read_only_numerical_quick_median_detail

@@ -129,10 +129,15 @@ std::tuple<Iterator, int, int> trim_sequence_right(Iterator active_sequence_end,
 * elements greater than the pivot.
 */
 template <typename Iterator, typename PerformanceStats>
-std::tuple<int, int, int, double, double>
-count_elements(Iterator begin, Iterator end, double pivot, PerformanceStats &performance_stats)
+std::tuple<int, int, int, double, double> count_elements(Iterator begin,
+                                                         Iterator end,
+                                                         double pivot,
+                                                         PerformanceStats &performance_stats,
+                                                         double median_lower_bound,
+                                                         double median_upper_bound)
 {
     int less_than_count = 0, equal_to_count = 0, greater_than_count = 0;
+    int less_than_count_in_inv = 0, greater_than_count_in_inv = 0;
     double max_of_elements_less_than_pivot = -std::numeric_limits<double>::max();
     double min_of_elements_greater_than_pivot = std::numeric_limits<double>::max();
     for (Iterator run = begin; run != end; ++run)
@@ -141,12 +146,20 @@ count_elements(Iterator begin, Iterator end, double pivot, PerformanceStats &per
         {
             max_of_elements_less_than_pivot = std::max(max_of_elements_less_than_pivot, static_cast<double>(*run));
             ++less_than_count;
+            if (*run > median_lower_bound)
+            {
+                ++less_than_count_in_inv;
+            }
         }
         else if (static_cast<double>(*run) > pivot)
         {
             min_of_elements_greater_than_pivot =
                 std::min(min_of_elements_greater_than_pivot, static_cast<double>(*run));
             ++greater_than_count;
+            if (*run < median_upper_bound)
+            {
+                ++greater_than_count_in_inv;
+            }
         }
         else
         {
@@ -169,7 +182,7 @@ count_elements(Iterator begin, Iterator end, double pivot, PerformanceStats &per
 template <typename Iterator, typename PivotCalculator, typename PerformanceStats>
 double read_only_numerical_quick_median_internal(Iterator begin,
                                                  Iterator end,
-                                                 PivotCalculator pivot_calculator,
+                                                 PivotCalculator &pivot_calculator,
                                                  PerformanceStats &performance_stats)
 {
     if (begin == end)
@@ -269,8 +282,12 @@ double read_only_numerical_quick_median_internal(Iterator begin,
          */
 
         double pivot = pivot_calculator(median_lower_bound, median_upper_bound);
-        std::tuple<int, int, int, double, double> element_counts =
-            count_elements(active_sequence_begin, active_sequence_end, pivot, performance_stats);
+        std::tuple<int, int, int, double, double> element_counts = count_elements(active_sequence_begin,
+                                                                                  active_sequence_end,
+                                                                                  pivot,
+                                                                                  performance_stats,
+                                                                                  median_lower_bound,
+                                                                                  median_upper_bound);
 
         int num_elements_less_than_pivot =
             std::get<0>(element_counts) + num_discarded_elements_less_than_median_lower_bound;

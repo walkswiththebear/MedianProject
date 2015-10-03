@@ -15,6 +15,10 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_te
     std::cout << "============================\n\n";
     test_top_level_algorithms();
 
+    std::cout << "Testing numerical median for distributions\n";
+    std::cout << "==========================================\n\n";
+    test_numerical_median_for_distributions();
+
     std::cout << "Testing read_only_quick_median for (mostly) random access iterators\n";
     std::cout << "===================================================================\n\n";
     m_which_algorithm = 0;
@@ -79,6 +83,25 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_t
     std::cout << "Testing read_only_numerical_quick_median...";
     check_true(read_only_numerical_quick_median(vec.cbegin(), vec.cend()) == 4.0);
     std::cout << "done.\n\n";
+}
+
+void read_only_quick_median_regression_tests_and_performance_measurement::test_numerical_median_for_distributions()
+{
+    std::random_device random_device;
+    std::mt19937 generator(random_device());
+    std::normal_distribution<> normal_distribution(42.0, sqrt(10.0));
+
+    size_t num_elems = 1000000;
+    std::vector<double> vec(num_elems);
+    for (size_t i = 0; i < num_elems; ++i)
+    {
+        vec[i] = normal_distribution(generator);
+    }
+
+    m_which_algorithm = 7;
+    no_op_median_performance_stats stats;
+    verify_median(vec.cbegin(), vec.cend(), stats);
+    read_only_numerical_quick_median_for_normal_distrubtions(vec.cbegin(), vec.cend());
 }
 
 template <typename Iterator, typename PerformanceStats>
@@ -154,6 +177,12 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
     else if (m_which_algorithm == 6)
     {
         read_only_numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
+        return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
+            begin, end, pivot_calculator, performance_stats);
+    }
+    else if (m_which_algorithm == 7)
+    {
+        read_only_numerical_quick_median_detail::normal_distribution_pivot pivot_calculator;
         return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
             begin, end, pivot_calculator, performance_stats);
     }

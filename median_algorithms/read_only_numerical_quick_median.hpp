@@ -40,6 +40,7 @@
 
 #include "detail/read_only_numerical_quick_median_detail.hpp"
 #include "detail/pivot_calculators/uniform_distribution_pivot.hpp"
+#include "detail/pivot_calculators/normal_distribution_pivot.hpp"
 #include "detail/no_op_median_performance_stats.hpp"
 
 namespace median_project
@@ -49,7 +50,7 @@ namespace median_project
  * Function read_only_numerical_quick_median
  * =========================================
  *
- * Non-modifying median algorithm for numerical data in average N * log(N) time.
+ * Non-modifying median algorithm for uniformly distributed numerical data.
  * Iterators need to be forward or better.
  *
  */
@@ -57,6 +58,22 @@ template <typename Iterator> double read_only_numerical_quick_median(Iterator be
 {
     no_op_median_performance_stats performance_stats;
     read_only_numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
+    return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
+        begin, end, pivot_calculator, performance_stats);
+}
+
+/**
+ * Function read_only_numerical_quick_median
+ * =========================================
+ *
+ * Non-modifying median algorithm for normally distributed numerical data.
+ * Iterators need to be forward or better.
+ *
+ */
+template <typename Iterator> double read_only_numerical_quick_median_for_normal_distrubtions(Iterator begin, Iterator end)
+{
+    no_op_median_performance_stats performance_stats;
+    read_only_numerical_quick_median_detail::normal_distribution_pivot pivot_calculator;
     return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
         begin, end, pivot_calculator, performance_stats);
 }

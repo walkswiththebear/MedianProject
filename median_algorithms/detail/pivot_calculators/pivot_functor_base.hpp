@@ -31,7 +31,7 @@ class pivot_functor_base
         , m_total_sequence_min(std::numeric_limits<double>::quiet_NaN())
         , m_total_sequence_max(std::numeric_limits<double>::quiet_NaN())
         , m_total_sequence_mean(std::numeric_limits<double>::quiet_NaN())
-        , m_total_sequence_variance(std::numeric_limits<double>::quiet_NaN())
+        , m_total_sequence_std_dev(std::numeric_limits<double>::quiet_NaN())
     {
     }
 
@@ -65,7 +65,7 @@ class pivot_functor_base
         m_total_sequence_min = min_value;
         m_total_sequence_max = max_value;
         m_total_sequence_mean = mean;
-        m_total_sequence_variance = variance;
+        m_total_sequence_std_dev = sqrt(variance);
     }
 
     /**
@@ -92,12 +92,12 @@ class pivot_functor_base
      */
     virtual double operator()(double median_lower_bound, double median_upper_bound) const = 0;
 
-  private:
+  protected:
     int m_total_sequence_length;
     double m_total_sequence_min;
     double m_total_sequence_max;
     double m_total_sequence_mean;
-    double m_total_sequence_variance;
+    double m_total_sequence_std_dev;
 };
 } // end namespace read_only_numerical_quick_median_detail
 } // end namespace median_project
