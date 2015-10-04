@@ -71,7 +71,7 @@ class pivot_functor_base
     /**
      * Getters for member variables that are used outside of the pivot functor.
      */
-    double get_total_sequence_length()
+    int get_total_sequence_length()
     {
         return m_total_sequence_length;
     }

@@ -19,6 +19,9 @@
     <Filter Include="performance_and_regression_tests\include\any_iterator\detail">
       <UniqueIdentifier>{d07b80ea-7c6b-452d-9c4f-38f92b779555}</UniqueIdentifier>
     </Filter>
+    <Filter Include="median_algorithms\detail\pivot_calculators">
+      <UniqueIdentifier>{09a618e5-48f2-468f-8ed1-e38fb9b58022}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\median_algorithms\read_only_numerical_quick_median.hpp">
@@ -51,8 +54,20 @@
     <ClInclude Include="..\..\median_algorithms\detail\read_only_quick_median_detail.hpp">
       <Filter>median_algorithms\detail</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators.hpp">
-      <Filter>median_algorithms\detail</Filter>
+    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators\distribution_specific_pivot_base.hpp">
+      <Filter>median_algorithms\detail\pivot_calculators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators\normal_distribution_pivot.hpp">
+      <Filter>median_algorithms\detail\pivot_calculators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators\pivot_functor_base.hpp">
+      <Filter>median_algorithms\detail\pivot_calculators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators\standard_numerical_pivot.hpp">
+      <Filter>median_algorithms\detail\pivot_calculators</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators\uniform_distribution_pivot.hpp">
+      <Filter>median_algorithms\detail\pivot_calculators</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

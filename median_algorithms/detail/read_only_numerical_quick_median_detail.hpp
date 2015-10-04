@@ -235,8 +235,8 @@ double read_only_numerical_quick_median_internal(Iterator begin,
     // across loop iterations, we can update it efficiently, that is, without additional
     // comparisons.
     //
-    double num_elements_less_than_median_lower_bound = 0;
-    double num_elements_greater_than_median_upper_bound = 0;
+    int num_elements_less_than_median_lower_bound = 0;
+    int num_elements_greater_than_median_upper_bound = 0;
 
     // Main loop for selecting and processing pivots.
     //

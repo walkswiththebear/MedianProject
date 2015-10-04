@@ -12,7 +12,11 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\median_algorithms\detail\no_op_median_performance_stats.hpp" />
-    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators.hpp" />
+    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators\distribution_specific_pivot_base.hpp" />
+    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators\normal_distribution_pivot.hpp" />
+    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators\pivot_functor_base.hpp" />
+    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators\standard_numerical_pivot.hpp" />
+    <ClInclude Include="..\..\median_algorithms\detail\pivot_calculators\uniform_distribution_pivot.hpp" />
     <ClInclude Include="..\..\median_algorithms\detail\read_only_numerical_quick_median_detail.hpp" />
     <ClInclude Include="..\..\median_algorithms\detail\read_only_quick_median_detail.hpp" />
     <ClInclude Include="..\..\median_algorithms\read_only_numerical_quick_median.hpp" />
