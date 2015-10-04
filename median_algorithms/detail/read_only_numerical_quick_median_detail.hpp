@@ -129,15 +129,10 @@ std::tuple<Iterator, int, int> trim_sequence_right(Iterator active_sequence_end,
 * elements greater than the pivot.
 */
 template <typename Iterator, typename PerformanceStats>
-std::tuple<int, int, int, double, double> count_elements(Iterator begin,
-                                                         Iterator end,
-                                                         double pivot,
-                                                         PerformanceStats &performance_stats,
-                                                         double median_lower_bound,
-                                                         double median_upper_bound)
+std::tuple<int, int, int, double, double>
+count_elements(Iterator begin, Iterator end, double pivot, PerformanceStats &performance_stats)
 {
     int less_than_count = 0, equal_to_count = 0, greater_than_count = 0;
-    int less_than_count_in_inv = 0, greater_than_count_in_inv = 0;
     double max_of_elements_less_than_pivot = -std::numeric_limits<double>::max();
     double min_of_elements_greater_than_pivot = std::numeric_limits<double>::max();
     for (Iterator run = begin; run != end; ++run)
@@ -146,20 +141,12 @@ std::tuple<int, int, int, double, double> count_elements(Iterator begin,
         {
             max_of_elements_less_than_pivot = std::max(max_of_elements_less_than_pivot, static_cast<double>(*run));
             ++less_than_count;
-            if (*run > median_lower_bound)
-            {
-                ++less_than_count_in_inv;
-            }
         }
         else if (static_cast<double>(*run) > pivot)
         {
             min_of_elements_greater_than_pivot =
                 std::min(min_of_elements_greater_than_pivot, static_cast<double>(*run));
             ++greater_than_count;
-            if (*run < median_upper_bound)
-            {
-                ++greater_than_count_in_inv;
-            }
         }
         else
         {
@@ -243,6 +230,14 @@ double read_only_numerical_quick_median_internal(Iterator begin,
     median_upper_bound = pivot_calculator.get_total_sequence_max();
     performance_stats.set_sequence_length(total_length_of_sequence);
 
+    // To determine the numerical pivot, we need the number of elements below and above
+    // the current median lower bound and upper bound, respectively. By keeping that count
+    // across loop iterations, we can update it efficiently, that is, without additional
+    // comparisons.
+    //
+    double num_elements_less_than_median_lower_bound = 0;
+    double num_elements_greater_than_median_upper_bound = 0;
+
     // Main loop for selecting and processing pivots.
     //
     double median = 0.0;
@@ -281,13 +276,13 @@ double read_only_numerical_quick_median_internal(Iterator begin,
          * than the pivot in the subsequence [run, end).
          */
 
-        double pivot = pivot_calculator(median_lower_bound, median_upper_bound);
-        std::tuple<int, int, int, double, double> element_counts = count_elements(active_sequence_begin,
-                                                                                  active_sequence_end,
-                                                                                  pivot,
-                                                                                  performance_stats,
-                                                                                  median_lower_bound,
-                                                                                  median_upper_bound);
+        double pivot = pivot_calculator(median_lower_bound,
+                                        median_upper_bound,
+                                        num_elements_less_than_median_lower_bound,
+                                        num_elements_greater_than_median_upper_bound);
+
+        std::tuple<int, int, int, double, double> element_counts =
+            count_elements(active_sequence_begin, active_sequence_end, pivot, performance_stats);
 
         int num_elements_less_than_pivot =
             std::get<0>(element_counts) + num_discarded_elements_less_than_median_lower_bound;
@@ -307,6 +302,7 @@ double read_only_numerical_quick_median_internal(Iterator begin,
         if (num_elements_greater_than_pivot > (total_length_of_sequence / 2) + 1)
         {
             median_lower_bound = min_of_greater_than_pivot;
+            num_elements_less_than_median_lower_bound = num_elements_less_than_pivot + num_elements_equal_to_pivot;
         }
         //
         // Too many elements below pivot: new upper bound found.
@@ -314,6 +310,8 @@ double read_only_numerical_quick_median_internal(Iterator begin,
         else if (num_elements_less_than_pivot > (total_length_of_sequence / 2) + 1)
         {
             median_upper_bound = max_of_less_than_pivot;
+            num_elements_greater_than_median_upper_bound =
+                num_elements_greater_than_pivot + num_elements_equal_to_pivot;
         }
         //
         // Median position or median interval endpoint(s) found. Here, the cases of even and odd number of
@@ -358,6 +356,8 @@ double read_only_numerical_quick_median_internal(Iterator begin,
                     // We may have to continue in search of the other median interval endpoint, so also record this
                     // as a lower bound.
                     median_lower_bound = median_interval_left_endpoint;
+                    num_elements_less_than_median_lower_bound =
+                        num_elements_less_than_pivot + num_elements_equal_to_pivot;
                 }
                 //
                 // e_{n/2} != e_{n/2 + 1} and p == e_{n/2}
@@ -405,6 +405,8 @@ double read_only_numerical_quick_median_internal(Iterator begin,
                     // We may have to continue in search of the other median interval endpoint, so also record this
                     // as an upper bound.
                     median_upper_bound = median_interval_right_endpoint;
+                    num_elements_greater_than_median_upper_bound =
+                        num_elements_greater_than_pivot + num_elements_equal_to_pivot;
                 }
                 //
                 // Left and right endpoint of median interval must have been the same, and that was the pivot.

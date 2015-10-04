@@ -7,7 +7,7 @@
 #define TMB_NORMAL_DISTRIBUTION_PIVOT_09_27_2015_HPP
 
 #include <boost/math/special_functions/erf.hpp>
-#include "pivot_functor_base.hpp"
+#include "distribution_specific_pivot_base.hpp"
 
 /*
  * Pivot calculator for normally distributed data.
@@ -21,22 +21,15 @@ namespace read_only_numerical_quick_median_detail
 /**
  * Pivot calculator for uniform distributions.
  */
-class normal_distribution_pivot : public pivot_functor_base
+class normal_distribution_pivot : public distribution_specific_pivot_base
 {
-  public:
-    double operator()(double median_lower_bound, double median_upper_bound) const override
-    {
-        double pivot = quantile(cdf(median_lower_bound) / 2.0 + cdf(median_upper_bound) / 2.0);
-        return std::min(median_upper_bound, std::max(pivot, median_lower_bound));
-    }
-
   private:
-    double cdf(double x) const
+    virtual double cdf(double x) const override
     {
         return .5 * (1.0 + boost::math::erf((x - m_total_sequence_mean) / (sqrt(2.0) * m_total_sequence_std_dev)));
     }
 
-    double quantile(double x) const
+    virtual double quantile(double x) const override
     {
         return m_total_sequence_mean + m_total_sequence_std_dev * sqrt(2.0) * boost::math::erf_inv(2.0 * x - 1.0);
     }

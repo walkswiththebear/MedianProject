@@ -24,8 +24,10 @@ namespace read_only_numerical_quick_median_detail
 class uniform_distribution_pivot : public pivot_functor_base
 {
   public:
-
-    double operator()(double median_lower_bound, double median_upper_bound) const override
+    double operator()(double median_lower_bound,
+                      double median_upper_bound,
+                      int num_elements_less_than_median_lower_bound,
+                      int num_elements_greater_than_median_upper_bound) const override
     {
         double pivot = median_lower_bound / 2.0 + median_upper_bound / 2.0;
         return std::min(median_upper_bound, std::max(pivot, median_lower_bound));

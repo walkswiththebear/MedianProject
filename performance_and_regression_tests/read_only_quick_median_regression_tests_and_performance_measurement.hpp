@@ -156,7 +156,7 @@ class read_only_quick_median_regression_tests_and_performance_measurement
                    (static_cast<double>(m_sequence_length) * std::log2(static_cast<double>(m_sequence_length)));
         }
 
-      public:
+      private:
         void set_sequence_length(int len)
         {
             m_sequence_length = len;

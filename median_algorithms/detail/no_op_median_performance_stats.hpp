@@ -214,7 +214,7 @@ class no_op_median_performance_stats
     // No-op methods
     // =============
 
-  public:
+  private:
     void set_sequence_length(int len)
     {
     }

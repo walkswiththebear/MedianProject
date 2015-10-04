@@ -90,7 +90,10 @@ class pivot_functor_base
      * Function call operator, to be overridden by derived classes. Calculates the next
      * pivot from the max and min of the remaining interval.
      */
-    virtual double operator()(double median_lower_bound, double median_upper_bound) const = 0;
+    virtual double operator()(double median_lower_bound,
+                              double median_upper_bound,
+                              int num_elements_less_than_median_lower_bound,
+                              int num_elements_greater_than_median_upper_bound) const = 0;
 
   protected:
     int m_total_sequence_length;
