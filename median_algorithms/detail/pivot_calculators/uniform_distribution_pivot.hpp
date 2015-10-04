@@ -6,7 +6,7 @@
 #ifndef TMB_UNIFORM_DISTRIBUTION_PIVOT_09_27_2015_HPP
 #define TMB_UNIFORM_DISTRIBUTION_PIVOT_09_27_2015_HPP
 
-#include "pivot_functor_base.hpp"
+#include "distribution_specific_pivot_base.hpp"
 
 /*
  * Pivot calculator for uniformly distributed data.
@@ -21,16 +21,17 @@ namespace read_only_numerical_quick_median_detail
  * Pivot calculator for uniform distributions: use the midpoint of sequence min
  * and max.
  */
-class uniform_distribution_pivot : public pivot_functor_base
+class uniform_distribution_pivot : public distribution_specific_pivot_base
 {
-  public:
-    double operator()(double median_lower_bound,
-                      double median_upper_bound,
-                      int num_elements_less_than_median_lower_bound,
-                      int num_elements_greater_than_median_upper_bound) const override
+  private:
+    virtual double cdf(double x) const override
     {
-        double pivot = median_lower_bound / 2.0 + median_upper_bound / 2.0;
-        return std::min(median_upper_bound, std::max(pivot, median_lower_bound));
+        return (x - static_cast<double>(m_total_sequence_min)) / static_cast<double>(m_total_sequence_max - m_total_sequence_min);
+    }
+
+    virtual double quantile(double x) const override
+    {
+        return x * static_cast<double>(m_total_sequence_max - m_total_sequence_min + static_cast<double>(m_total_sequence_min));
     }
 };
 } // end namespace read_only_numerical_quick_median_detail

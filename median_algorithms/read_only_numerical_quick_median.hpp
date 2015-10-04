@@ -39,6 +39,7 @@
  */
 
 #include "detail/read_only_numerical_quick_median_detail.hpp"
+#include "detail/pivot_calculators/standard_numerical_pivot.hpp"
 #include "detail/pivot_calculators/uniform_distribution_pivot.hpp"
 #include "detail/pivot_calculators/normal_distribution_pivot.hpp"
 #include "detail/no_op_median_performance_stats.hpp"
@@ -50,11 +51,32 @@ namespace median_project
  * Function read_only_numerical_quick_median
  * =========================================
  *
- * Non-modifying median algorithm for uniformly distributed numerical data.
+ * Non-modifying median algorithm for numerical data. Use this algorithm when there is no
+ * information or conjecture regarding the distribution of the data. This algorithm will
+ * experience the worst case performance (O(n^2)) for data with a one-sided distribution that
+ * is equal to or worse than an exponential distribution.
+ * 
  * Iterators need to be forward or better.
  *
  */
 template <typename Iterator> double read_only_numerical_quick_median(Iterator begin, Iterator end)
+{
+    no_op_median_performance_stats performance_stats;
+    read_only_numerical_quick_median_detail::standard_numerical_pivot pivot_calculator;
+    return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
+        begin, end, pivot_calculator, performance_stats);
+}
+
+/**
+ * Function read_only_numerical_quick_median_for_uniform_distributions
+ * ===================================================================
+ *
+ * Non-modifying median algorithm for uniformly distributed numerical data.
+ * 
+ * Iterators need to be forward or better.
+ *
+ */
+template <typename Iterator> double read_only_numerical_quick_median_for_uniform_distributions(Iterator begin, Iterator end)
 {
     no_op_median_performance_stats performance_stats;
     read_only_numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
@@ -63,10 +85,11 @@ template <typename Iterator> double read_only_numerical_quick_median(Iterator be
 }
 
 /**
- * Function read_only_numerical_quick_median
- * =========================================
+ * Function read_only_numerical_quick_median_for_normal_distributions
+ * ==================================================================
  *
  * Non-modifying median algorithm for normally distributed numerical data.
+ * 
  * Iterators need to be forward or better.
  *
  */

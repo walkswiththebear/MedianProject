@@ -89,9 +89,14 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
 {
     std::random_device random_device;
     std::mt19937 generator(random_device());
+
+    /*
+     * Normal distribution
+     */
+
     std::normal_distribution<> normal_distribution(42.0, sqrt(10.0));
 
-    size_t num_elems = 1000000;
+    size_t num_elems = 10000000;
     std::vector<double> vec(num_elems);
     for (size_t i = 0; i < num_elems; ++i)
     {
@@ -101,7 +106,22 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     m_which_algorithm = 7;
     no_op_median_performance_stats stats;
     verify_median(vec.cbegin(), vec.cend(), stats);
-    read_only_numerical_quick_median_for_normal_distrubtions(vec.cbegin(), vec.cend());
+
+    vec.push_back(normal_distribution(generator));
+    verify_median(vec.cbegin(), vec.cend(), stats);
+
+    /*
+     * Uniform distribution
+     */
+
+    std::uniform_int_distribution<> uniform_distribution(1, num_elems / 10);
+    for (size_t i = 0; i < num_elems; ++i)
+    {
+        vec[i] = uniform_distribution(generator);
+    }
+
+    m_which_algorithm = 8;
+    verify_median(vec.cbegin(), vec.cend(), stats);
 }
 
 template <typename Iterator, typename PerformanceStats>
@@ -183,6 +203,12 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
     else if (m_which_algorithm == 7)
     {
         read_only_numerical_quick_median_detail::normal_distribution_pivot pivot_calculator;
+        return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
+            begin, end, pivot_calculator, performance_stats);
+    }
+    else if (m_which_algorithm == 8)
+    {
+        read_only_numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
         return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
             begin, end, pivot_calculator, performance_stats);
     }
