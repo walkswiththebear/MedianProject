@@ -31,7 +31,7 @@ class uniform_distribution_pivot : public distribution_specific_pivot_base
 
     virtual double quantile(double x) const override
     {
-        return x * static_cast<double>(m_total_sequence_max - m_total_sequence_min + static_cast<double>(m_total_sequence_min));
+        return x * static_cast<double>(m_total_sequence_max - m_total_sequence_min) + static_cast<double>(m_total_sequence_min);
     }
 };
 } // end namespace read_only_numerical_quick_median_detail
