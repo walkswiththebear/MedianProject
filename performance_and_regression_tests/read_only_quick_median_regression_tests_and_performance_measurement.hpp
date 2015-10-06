@@ -3,6 +3,7 @@
 
 #pragma once
 #include <cmath>
+#include <random>
 #include "median_algorithms/read_only_quick_median.hpp"
 #include "median_algorithms/read_only_numerical_quick_median.hpp"
 using namespace median_project;
@@ -209,6 +210,9 @@ class read_only_quick_median_regression_tests_and_performance_measurement
     //
     static void test_top_level_algorithms();
     static void test_numerical_median_for_distributions();
+    static void test_numerical_median_for_uniform_distribution(size_t num_elems, int num_reps, std::mt19937 &generator);
+    static void test_numerical_median_for_normal_distribution(size_t num_elems, int num_reps, std::mt19937 &generator);
+    static void test_numerical_median_for_exponential_distribution(size_t num_elems, int num_reps, std::mt19937& generator);
     static void test_algorithm();
     static void run_white_box_tests();
     template <typename Iterator> static void run_a_few_shuffles(Iterator begin, Iterator end);

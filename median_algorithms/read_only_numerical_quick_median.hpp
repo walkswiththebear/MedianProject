@@ -42,6 +42,7 @@
 #include "detail/pivot_calculators/standard_numerical_pivot.hpp"
 #include "detail/pivot_calculators/uniform_distribution_pivot.hpp"
 #include "detail/pivot_calculators/normal_distribution_pivot.hpp"
+#include "detail/pivot_calculators/exponential_distribution_pivot.hpp"
 #include "detail/no_op_median_performance_stats.hpp"
 
 namespace median_project
@@ -53,8 +54,7 @@ namespace median_project
  *
  * Non-modifying median algorithm for numerical data. Use this algorithm when there is no
  * information or conjecture regarding the distribution of the data. This algorithm will
- * experience the worst case performance (O(n^2)) for data with a one-sided distribution that
- * is equal to or worse than an exponential distribution.
+ * experience the worst case performance (O(n^2)) for the sequence \{2^(-i)\}_{i\in N).
  * 
  * Iterators need to be forward or better.
  *
@@ -100,6 +100,24 @@ template <typename Iterator> double read_only_numerical_quick_median_for_normal_
     return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
         begin, end, pivot_calculator, performance_stats);
 }
+
+/**
+ * Function read_only_numerical_quick_median_for_exponential_distributions
+ * =======================================================================
+ *
+ * Non-modifying median algorithm for exponentially distributed numerical data.
+ * 
+ * Iterators need to be forward or better.
+ *
+ */
+template <typename Iterator> double read_only_numerical_quick_median_for_exponential_distrubtions(Iterator begin, Iterator end)
+{
+    no_op_median_performance_stats performance_stats;
+    read_only_numerical_quick_median_detail::exponential_distribution_pivot pivot_calculator;
+    return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
+        begin, end, pivot_calculator, performance_stats);
+}
+
 } // end namespace median_project
 
 #endif // TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_08_24_2015_HPP

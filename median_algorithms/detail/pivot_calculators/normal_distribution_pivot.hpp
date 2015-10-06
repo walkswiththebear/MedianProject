@@ -19,7 +19,7 @@ namespace read_only_numerical_quick_median_detail
 {
 
 /**
- * Pivot calculator for uniform distributions.
+ * Pivot calculator for normal distributions.
  */
 class normal_distribution_pivot : public distribution_specific_pivot_base
 {

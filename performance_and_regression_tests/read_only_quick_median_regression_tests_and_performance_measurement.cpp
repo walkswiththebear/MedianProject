@@ -5,19 +5,19 @@
 #include <list>
 #include <vector>
 #include <algorithm>
-#include <random>
 #include "read_only_quick_median_regression_tests_and_performance_measurement.hpp"
 #include "performance_and_regression_tests/include/any_iterator/any_iterator.hpp"
 
 void read_only_quick_median_regression_tests_and_performance_measurement::run_tests()
 {
-    std::cout << "Testing top level algorithms\n";
+    /*std::cout << "Testing top level algorithms\n";
     std::cout << "============================\n\n";
     test_top_level_algorithms();
-
+*/
     std::cout << "Testing numerical median for distributions\n";
     std::cout << "==========================================\n\n";
     test_numerical_median_for_distributions();
+
     /*
         std::cout << "Testing read_only_quick_median for (mostly) random access iterators\n";
         std::cout << "===================================================================\n\n";
@@ -87,16 +87,151 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_t
 
 void read_only_quick_median_regression_tests_and_performance_measurement::test_numerical_median_for_distributions()
 {
+    size_t num_elems = 10000000;
+    int num_reps = 30;
     std::random_device random_device;
     std::mt19937 generator(random_device());
 
-    /*
-     * Normal distribution
-     */
+    test_numerical_median_for_uniform_distribution(num_elems, num_reps, generator);
+    test_numerical_median_for_normal_distribution(num_elems, num_reps, generator);
+    test_numerical_median_for_exponential_distribution(num_elems, num_reps, generator);
+}
+
+void
+read_only_quick_median_regression_tests_and_performance_measurement::test_numerical_median_for_uniform_distribution(
+    size_t num_elems,
+    int num_reps, std::mt19937& generator)
+{
+
+    std::vector<double> vec(num_elems);
+    std::uniform_real_distribution<> uniform_distribution(1.0, static_cast<double>(num_elems));
+    for (size_t i = 0; i < num_elems; ++i)
+    {
+        vec[i] = uniform_distribution(generator);
+    }
+
+    m_which_algorithm = 8;
+    performance_stats stats;
+
+    std::cout << "Uniformly distributed data, pivot for uniform distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 6;
+    stats = performance_stats();
+    std::cout << "Same data, standard numerical pivot.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 7;
+    stats = performance_stats();
+    std::cout << "Same data, pivot for normal distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 0;
+    stats = performance_stats();
+    std::cout << "Same data, non-numerical random pivot.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 8;
+    vec.push_back(uniform_distribution(generator));
+    stats = performance_stats();
+    std::cout << "Uniformly distributed data, pivot for uniform distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 6;
+    stats = performance_stats();
+    std::cout << "Same data, standard numerical pivot.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 7;
+    stats = performance_stats();
+    std::cout << "Same data, pivot for normal distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 0;
+    stats = performance_stats();
+    std::cout << "Same data, non-numerical random pivot.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+}
+
+void read_only_quick_median_regression_tests_and_performance_measurement::test_numerical_median_for_normal_distribution(
+    size_t num_elems,
+    int num_reps, std::mt19937& generator)
+{
 
     std::normal_distribution<> normal_distribution(42.0, sqrt(10.0));
 
-    size_t num_elems = 10000000;
     std::vector<double> vec(num_elems);
     for (size_t i = 0; i < num_elems; ++i)
     {
@@ -106,9 +241,8 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     m_which_algorithm = 7;
     performance_stats stats;
 
-    int num_reps = 50;
     std::cout << "Normally distributed data, pivot for normal distribution.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -122,7 +256,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     m_which_algorithm = 6;
     stats = performance_stats();
     std::cout << "Same data, standard numerical pivot.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -136,7 +270,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     m_which_algorithm = 8;
     stats = performance_stats();
     std::cout << "Same data, pivot for uniform distribution.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -150,7 +284,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     m_which_algorithm = 0;
     stats = performance_stats();
     std::cout << "Same data, non-numerical random pivot.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -165,7 +299,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     vec.push_back(normal_distribution(generator));
     stats = performance_stats();
     std::cout << "Normally distributed data, pivot for normal distribution.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -179,7 +313,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     m_which_algorithm = 6;
     stats = performance_stats();
     std::cout << "Same data, standard numerical pivot.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -193,7 +327,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     m_which_algorithm = 8;
     stats = performance_stats();
     std::cout << "Same data, pivot for uniform distribution.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -207,7 +341,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     m_which_algorithm = 0;
     stats = performance_stats();
     std::cout << "Same data, non-numerical random pivot.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -217,23 +351,26 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
               << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
               << std::flush;
+}
 
-    /*
-     * Uniform distribution
-     */
+void read_only_quick_median_regression_tests_and_performance_measurement::test_numerical_median_for_exponential_distribution(
+    size_t num_elems,
+    int num_reps, std::mt19937& generator)
+{
 
-    vec.resize(num_elems);
-    std::uniform_int_distribution<> uniform_distribution(1, num_elems);
+    std::exponential_distribution<> exponential_distribution(42.0);
+
+    std::vector<double> vec(num_elems);
     for (size_t i = 0; i < num_elems; ++i)
     {
-        vec[i] = uniform_distribution(generator);
+        vec[i] = exponential_distribution(generator);
     }
 
-    m_which_algorithm = 8;
-    stats = performance_stats();
+    m_which_algorithm = 9;
+    performance_stats stats;
 
-    std::cout << "Uniformly distributed data, pivot for uniform distribution.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "Exponetially distributed data, pivot for exponential distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -247,7 +384,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     m_which_algorithm = 6;
     stats = performance_stats();
     std::cout << "Same data, standard numerical pivot.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -258,10 +395,10 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
               << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
               << std::flush;
 
-    m_which_algorithm = 7;
+    m_which_algorithm = 8;
     stats = performance_stats();
-    std::cout << "Same data, pivot for normal distribution.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "Same data, pivot for uniform distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -275,7 +412,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     m_which_algorithm = 0;
     stats = performance_stats();
     std::cout << "Same data, non-numerical random pivot.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -286,11 +423,11 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
               << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
               << std::flush;
 
-    m_which_algorithm = 8;
-    vec.push_back(normal_distribution(generator));
+    m_which_algorithm = 9;
+    vec.push_back(exponential_distribution(generator));
     stats = performance_stats();
-    std::cout << "Uniformly distributed data, pivot for uniform distribution.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "Exponentially distributed data, pivot for exponetial distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -304,7 +441,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     m_which_algorithm = 6;
     stats = performance_stats();
     std::cout << "Same data, standard numerical pivot.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -315,10 +452,10 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
               << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
               << std::flush;
 
-    m_which_algorithm = 7;
+    m_which_algorithm = 8;
     stats = performance_stats();
-    std::cout << "Same data, pivot for normal distribution.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "Same data, pivot for uniform distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -332,7 +469,135 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     m_which_algorithm = 0;
     stats = performance_stats();
     std::cout << "Same data, non-numerical random pivot.\n" << std::flush;
-    std::cout << "  " << vec.size() << " elements, no duplicates, " << num_reps << "  times.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+}
+
+void read_only_quick_median_regression_tests_and_performance_measurement::test_numerical_median_for_geometric_distribution(
+    size_t num_elems,
+    int num_reps, std::mt19937& generator)
+{
+
+    std::geometric_distribution<> geometric_distribution(1.0 / 6.0);
+
+    std::vector<int> vec(num_elems);
+    for (size_t i = 0; i < num_elems; ++i)
+    {
+        vec[i] = geometric_distribution(generator);
+    }
+
+    m_which_algorithm = 10;
+    performance_stats stats;
+
+    std::cout << "Geometrically distributed data, pivot for geometric distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 6;
+    stats = performance_stats();
+    std::cout << "Same data, standard numerical pivot.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 8;
+    stats = performance_stats();
+    std::cout << "Same data, pivot for uniform distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 0;
+    stats = performance_stats();
+    std::cout << "Same data, non-numerical random pivot.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 9;
+    vec.push_back(geometric_distribution(generator));
+    stats = performance_stats();
+    std::cout << "Geometrically distributed data, pivot for geometric distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 6;
+    stats = performance_stats();
+    std::cout << "Same data, standard numerical pivot.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 8;
+    stats = performance_stats();
+    std::cout << "Same data, pivot for uniform distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        // std::random_shuffle(vec.begin(), vec.end());
+        verify_median(vec.cbegin(), vec.cend(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+
+    m_which_algorithm = 0;
+    stats = performance_stats();
+    std::cout << "Same data, non-numerical random pivot.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
@@ -361,7 +626,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
         std::pair<Iterator, Iterator> median_pos_pair = read_only_quick_median_detail::read_only_quick_median_internal(
             begin, end, read_only_quick_median_detail::standard_pivoting_strategy(), performance_stats);
 
-        return (*std::get<0>(median_pos_pair) + *std::get<1>(median_pos_pair)) / 2.0;
+        return (static_cast<double>(*std::get<0>(median_pos_pair)) + static_cast<double>(*std::get<1>(median_pos_pair))) / 2.0;
     }
     else if (m_which_algorithm == 1)
     {
@@ -429,6 +694,12 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
     else if (m_which_algorithm == 8)
     {
         read_only_numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
+        return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
+            begin, end, pivot_calculator, performance_stats);
+    }
+    else if (m_which_algorithm == 9)
+    {
+        read_only_numerical_quick_median_detail::exponential_distribution_pivot pivot_calculator;
         return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
             begin, end, pivot_calculator, performance_stats);
     }

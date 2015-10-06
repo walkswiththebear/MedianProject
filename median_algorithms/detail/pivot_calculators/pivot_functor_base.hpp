@@ -57,7 +57,11 @@ class pivot_functor_base
             mean = mean + delta / static_cast<double>(length);
             variance = variance + delta * (*run - mean);
         }
-        variance /= static_cast<double>(length);
+
+        if (length > 1)
+        {
+            variance /= (static_cast<double>(length)) - 1;
+        }
 
         performance_stats.add_comparisons(2 * length);
 
