@@ -87,6 +87,11 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_t
     vec.push_back(10.);
     check_true(numerical_quick_median(vec.begin(), vec.end()) == 4.5);
     std::cout << "done.\n\n";
+
+    std::cout << "Testing numerical_quick_median for uniform distributions...";
+    std::random_shuffle(vec.begin(), vec.end());
+    check_true(numerical_quick_median_for_uniform_distributions(vec.begin(), vec.end()) == 4.5);
+    std::cout << "done.\n\n";
 }
 
 void read_only_quick_median_regression_tests_and_performance_measurement::test_numerical_median_for_distributions()

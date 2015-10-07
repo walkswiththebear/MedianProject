@@ -60,7 +60,7 @@ class pivot_functor_base
 
         if (length > 1)
         {
-            variance /= (static_cast<double>(length)) - 1;
+            variance /= (static_cast<double>(length) - 1.0);
         }
 
         performance_stats.add_comparisons(2 * length);
