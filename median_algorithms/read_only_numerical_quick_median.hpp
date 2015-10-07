@@ -62,7 +62,7 @@ namespace median_project
 template <typename Iterator> double read_only_numerical_quick_median(Iterator begin, Iterator end)
 {
     no_op_median_performance_stats performance_stats;
-    read_only_numerical_quick_median_detail::standard_numerical_pivot pivot_calculator;
+    numerical_quick_median_detail::standard_numerical_pivot pivot_calculator;
     return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
         begin, end, pivot_calculator, performance_stats);
 }
@@ -79,7 +79,7 @@ template <typename Iterator> double read_only_numerical_quick_median(Iterator be
 template <typename Iterator> double read_only_numerical_quick_median_for_uniform_distributions(Iterator begin, Iterator end)
 {
     no_op_median_performance_stats performance_stats;
-    read_only_numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
+    numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
     return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
         begin, end, pivot_calculator, performance_stats);
 }
@@ -96,7 +96,7 @@ template <typename Iterator> double read_only_numerical_quick_median_for_uniform
 template <typename Iterator> double read_only_numerical_quick_median_for_normal_distrubtions(Iterator begin, Iterator end)
 {
     no_op_median_performance_stats performance_stats;
-    read_only_numerical_quick_median_detail::normal_distribution_pivot pivot_calculator;
+    numerical_quick_median_detail::normal_distribution_pivot pivot_calculator;
     return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
         begin, end, pivot_calculator, performance_stats);
 }
@@ -113,7 +113,7 @@ template <typename Iterator> double read_only_numerical_quick_median_for_normal_
 template <typename Iterator> double read_only_numerical_quick_median_for_exponential_distrubtions(Iterator begin, Iterator end)
 {
     no_op_median_performance_stats performance_stats;
-    read_only_numerical_quick_median_detail::exponential_distribution_pivot pivot_calculator;
+    numerical_quick_median_detail::exponential_distribution_pivot pivot_calculator;
     return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
         begin, end, pivot_calculator, performance_stats);
 }

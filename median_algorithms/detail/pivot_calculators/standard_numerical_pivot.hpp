@@ -14,7 +14,7 @@
 
 namespace median_project
 {
-namespace read_only_numerical_quick_median_detail
+namespace numerical_quick_median_detail
 {
 
 /**
@@ -33,7 +33,7 @@ class standard_numerical_pivot : public pivot_functor_base
         return std::min(median_upper_bound, std::max(pivot, median_lower_bound));
     }
 };
-} // end namespace read_only_numerical_quick_median_detail
+} // end namespace numerical_quick_median_detail
 } // end namespace median_project
 
 #endif // TMB_STANDARD_NUMERICAL_PIVOT_10_03_2015_HPP

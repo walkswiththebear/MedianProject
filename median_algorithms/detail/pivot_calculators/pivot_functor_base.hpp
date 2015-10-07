@@ -12,7 +12,7 @@
 
 namespace median_project
 {
-namespace read_only_numerical_quick_median_detail
+namespace numerical_quick_median_detail
 {
 
 /**
@@ -106,7 +106,7 @@ class pivot_functor_base
     double m_total_sequence_mean;
     double m_total_sequence_std_dev;
 };
-} // end namespace read_only_numerical_quick_median_detail
+} // end namespace numerical_quick_median_detail
 } // end namespace median_project
 
 #endif // TMB_PIVOT_FUNCTOR_BASE_09_28_2015_HPP

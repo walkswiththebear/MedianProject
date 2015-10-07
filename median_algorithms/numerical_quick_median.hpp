@@ -42,7 +42,7 @@ template <typename RandomAccessIterator>
 double numerical_quick_median(RandomAccessIterator begin, RandomAccessIterator end)
 {
     no_op_median_performance_stats performance_stats;
-    read_only_numerical_quick_median_detail::standard_numerical_pivot pivot_calculator;
+    numerical_quick_median_detail::standard_numerical_pivot pivot_calculator;
     return numerical_quick_median_detail::numerical_quick_median_internal(
         begin, end, pivot_calculator, performance_stats);
 }
@@ -58,7 +58,7 @@ template <typename RandomAccessIterator>
 double numerical_quick_median_for_uniform_distributions(RandomAccessIterator begin, RandomAccessIterator end)
 {
     no_op_median_performance_stats performance_stats;
-    read_only_numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
+    numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
     return numerical_quick_median_detail::numerical_quick_median_internal(
         begin, end, pivot_calculator, performance_stats);
 }
@@ -74,7 +74,7 @@ template <typename RandomAccessIterator>
 double numerical_quick_median_for_normal_distrubtions(RandomAccessIterator begin, RandomAccessIterator end)
 {
     no_op_median_performance_stats performance_stats;
-    read_only_numerical_quick_median_detail::normal_distribution_pivot pivot_calculator;
+    numerical_quick_median_detail::normal_distribution_pivot pivot_calculator;
     return numerical_quick_median_detail::numerical_quick_median_internal(
         begin, end, pivot_calculator, performance_stats);
 }
@@ -90,7 +90,7 @@ template <typename RandomAccessIterator>
 double numerical_quick_median_for_exponential_distrubtions(RandomAccessIterator begin, RandomAccessIterator end)
 {
     no_op_median_performance_stats performance_stats;
-    read_only_numerical_quick_median_detail::exponential_distribution_pivot pivot_calculator;
+    numerical_quick_median_detail::exponential_distribution_pivot pivot_calculator;
     return numerical_quick_median_detail::numerical_quick_median_internal(
         begin, end, pivot_calculator, performance_stats);
 }

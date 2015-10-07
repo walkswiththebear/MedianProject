@@ -15,7 +15,7 @@
 
 namespace median_project
 {
-namespace read_only_numerical_quick_median_detail
+namespace numerical_quick_median_detail
 {
 
 /**
@@ -36,7 +36,7 @@ class exponential_distribution_pivot : public distribution_specific_pivot_base
         return  - std::log(1.0 - x) / lambda;
     }
 };
-} // end namespace read_only_numerical_quick_median_detail
+} // end namespace numerical_quick_median_detail
 } // end namespace median_project
 
 #endif // TMB_EXPONENTIAL_DISTRIBUTION_PIVOT_09_27_2015_HPP

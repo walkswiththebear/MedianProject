@@ -14,7 +14,7 @@
 
 namespace median_project
 {
-namespace read_only_numerical_quick_median_detail
+namespace numerical_quick_median_detail
 {
 
 /**
@@ -33,7 +33,7 @@ class uniform_distribution_pivot : public distribution_specific_pivot_base
         return x * static_cast<double>(m_total_sequence_max - m_total_sequence_min) + static_cast<double>(m_total_sequence_min);
     }
 };
-} // end namespace read_only_numerical_quick_median_detail
+} // end namespace numerical_quick_median_detail
 } // end namespace median_project
 
 #endif // TMB_UNIFORM_DISTRIBUTION_PIVOT_09_27_2015_HPP

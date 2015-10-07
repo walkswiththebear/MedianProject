@@ -563,25 +563,25 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
     }
     else if (m_which_algorithm == 6)
     {
-        read_only_numerical_quick_median_detail::standard_numerical_pivot pivot_calculator;
+        numerical_quick_median_detail::standard_numerical_pivot pivot_calculator;
         return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
             begin, end, pivot_calculator, performance_stats);
     }
     else if (m_which_algorithm == 7)
     {
-        read_only_numerical_quick_median_detail::normal_distribution_pivot pivot_calculator;
+        numerical_quick_median_detail::normal_distribution_pivot pivot_calculator;
         return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
             begin, end, pivot_calculator, performance_stats);
     }
     else if (m_which_algorithm == 8)
     {
-        read_only_numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
+        numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
         return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
             begin, end, pivot_calculator, performance_stats);
     }
     else if (m_which_algorithm == 9)
     {
-        read_only_numerical_quick_median_detail::exponential_distribution_pivot pivot_calculator;
+        numerical_quick_median_detail::exponential_distribution_pivot pivot_calculator;
         return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
             begin, end, pivot_calculator, performance_stats);
     }

@@ -15,7 +15,7 @@
 
 namespace median_project
 {
-namespace read_only_numerical_quick_median_detail
+namespace numerical_quick_median_detail
 {
 
 /**
@@ -34,7 +34,7 @@ class normal_distribution_pivot : public distribution_specific_pivot_base
         return m_total_sequence_mean + m_total_sequence_std_dev * sqrt(2.0) * boost::math::erf_inv(2.0 * x - 1.0);
     }
 };
-} // end namespace read_only_numerical_quick_median_detail
+} // end namespace numerical_quick_median_detail
 } // end namespace median_project
 
 #endif // TMB_NORMAL_DISTRIBUTION_PIVOT_09_27_2015_HPP

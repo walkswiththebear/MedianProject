@@ -15,7 +15,7 @@
 
 namespace median_project
 {
-namespace read_only_numerical_quick_median_detail
+namespace numerical_quick_median_detail
 {
 
 /**
@@ -48,7 +48,7 @@ class distribution_specific_pivot_base : public pivot_functor_base
     virtual double cdf(double x) const = 0;
     virtual double quantile(double x) const = 0;
 };
-} // end namespace read_only_numerical_quick_median_detail
+} // end namespace numerical_quick_median_detail
 } // end namespace median_project
 
 #endif // TMB_DISTRIBUTION_SPECIFIC_PIVOT_BASE_10_03_2015_HPP
