@@ -60,7 +60,9 @@ double numerical_quick_median_internal(RandomAccessIterator begin,
     while (true)
     {
 
-        // Select a pivot as close to the median as you can guess by the data distribution
+        // Select a pivot as close to the median as you can guess by the data distribution.
+        // The pivot is in the interval [current_interval_min, current_interval_max].
+        //
         double pivot = pivot_calculator(current_interval_min,
                                         current_interval_max,
                                         num_elements_below_current_interval,
@@ -112,30 +114,34 @@ double numerical_quick_median_internal(RandomAccessIterator begin,
             {
                 std::swap(*up_runner, *down_runner);
             }
-            //
-            // If the two runners are now equal, then this is the last run through the loop,
-            // the element currently pointed to by both runners is greater than or equal to the
-            // pivot (see exercise below), and that element has not been processed yet for number of
-            // elements equal to pivot and min of elements greater than pivot.
-            //
-            else
-            {
-                if (*down_runner == pivot)
-                {
-                    ++num_elements_equal_to_pivot;
-                }
-                else
-                {
-                    min_of_greater_than_pivot = std::min(min_of_greater_than_pivot, *down_runner);
-                }
-            }
         }
-        
+
         /*
-         * Exercise: Prove that at this point, both up_runner and down-runner point at the first
-         * position of the right-hand subinterval, that is, the one that contains all elements
-         * that are greater than or equal to the pivot.
+         * Exercise
+         * ========
+         *
+         * Prove that at this point:
+         *
+         * 1) The right-hand subinterval, that is, the one that contains all elements that are
+         *    greater than or equal to the pivot, is not empty. Hint: look at the choice of pivot.
+         *
+         * 2) Both up_runner and down_runner point at the first position of the right-hand subinterval.
+         *
+         * 3) All elements of the sequence except for the one that the element that up_runner and
+         *    down_runner point to have been processed to update the number of elements equal to pivot
+         *    and the min of the elements greater than the pivot.
          */
+
+        // See Item 3 of the exercise above.
+        //
+        if (*down_runner == pivot)
+        {
+            ++num_elements_equal_to_pivot;
+        }
+        else
+        {
+            min_of_greater_than_pivot = std::min(min_of_greater_than_pivot, *down_runner);
+        }
 
         // Count elements
         //
@@ -167,7 +173,11 @@ double numerical_quick_median_internal(RandomAccessIterator begin,
         else if (num_elements_greater_than_pivot > (total_length_of_sequence + 1) / 2)
         {
             current_interval_begin = up_runner;
-            current_interval_min = num_elements_equal_to_pivot > 0 ? pivot : min_of_greater_than_pivot;
+
+            // NOTE: In this branch, min_of_greater_than_pivot has been set because
+            // the number of elements greater than the pivot is greater than zero.
+            //
+            current_interval_min = min_of_greater_than_pivot;
             num_elements_below_current_interval += num_elements_in_left_subinterval;
         }
         //
