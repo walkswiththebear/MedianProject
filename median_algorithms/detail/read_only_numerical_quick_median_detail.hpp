@@ -7,7 +7,7 @@
 #define TMB_READ_ONLY_NUMERICAL_QUICK_MEDIAN_DETAIL_08_24_2015_HPP
 
 /*
- * Implementation details for read-only numerical median algorithms.
+ * Implementation details for read-only numerical quick median algorithm.
  */
 
 #include <algorithm>
@@ -204,9 +204,6 @@ double read_only_numerical_quick_median_internal(Iterator begin,
      * far from the mean.
      */
 
-    double median_lower_bound = std::numeric_limits<double>::max();
-    double median_upper_bound = -std::numeric_limits<double>::max();
-
     // If the number of elements is even, the median is an interval of
     // which both ends must be found.
     //
@@ -226,8 +223,8 @@ double read_only_numerical_quick_median_internal(Iterator begin,
 
     pivot_calculator.initialize(begin, end, performance_stats);
     total_length_of_sequence = pivot_calculator.get_total_sequence_length();
-    median_lower_bound = pivot_calculator.get_total_sequence_min();
-    median_upper_bound = pivot_calculator.get_total_sequence_max();
+    double median_lower_bound = pivot_calculator.get_total_sequence_min();
+    double median_upper_bound = pivot_calculator.get_total_sequence_max();
     performance_stats.set_sequence_length(total_length_of_sequence);
 
     // To determine the numerical pivot, we need the number of elements below and above
@@ -319,7 +316,7 @@ double read_only_numerical_quick_median_internal(Iterator begin,
         //
         else
         {
-            // Sequence length is an even number: median found.
+            // Sequence length is an odd number: median found.
             //
             if (total_length_of_sequence % 2 == 1)
             {
@@ -338,7 +335,7 @@ double read_only_numerical_quick_median_internal(Iterator begin,
                 break;
             }
             //
-            // Sequence length is an odd number: one or both median interval endpoints found.
+            // Sequence length is an even number: one or both median interval endpoints found.
             //
             // In the case distinctions below, p stands for the pivot, and e_n stands for the
             // element at 1-based position n. So e_{n/2} is the left endpoint of the median

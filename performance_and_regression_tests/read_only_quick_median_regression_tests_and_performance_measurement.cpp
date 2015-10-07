@@ -10,15 +10,14 @@
 
 void read_only_quick_median_regression_tests_and_performance_measurement::run_tests()
 {
-    /*std::cout << "Testing top level algorithms\n";
+    std::cout << "Testing top level algorithms\n";
     std::cout << "============================\n\n";
     test_top_level_algorithms();
-*/
-    std::cout << "Testing numerical median for distributions\n";
-    std::cout << "==========================================\n\n";
-    test_numerical_median_for_distributions();
-
     /*
+        std::cout << "Testing numerical median for distributions\n";
+        std::cout << "==========================================\n\n";
+        test_numerical_median_for_distributions();
+
         std::cout << "Testing read_only_quick_median for (mostly) random access iterators\n";
         std::cout << "===================================================================\n\n";
         m_which_algorithm = 0;
@@ -83,6 +82,11 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_t
     std::cout << "Testing read_only_numerical_quick_median...";
     check_true(read_only_numerical_quick_median(vec.cbegin(), vec.cend()) == 4.0);
     std::cout << "done.\n\n";
+
+    std::cout << "Testing numerical_quick_median...";
+    vec.push_back(10.);
+    check_true(numerical_quick_median(vec.begin(), vec.end()) == 4.5);
+    std::cout << "done.\n\n";
 }
 
 void read_only_quick_median_regression_tests_and_performance_measurement::test_numerical_median_for_distributions()
@@ -100,7 +104,8 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
 void
 read_only_quick_median_regression_tests_and_performance_measurement::test_numerical_median_for_uniform_distribution(
     size_t num_elems,
-    int num_reps, std::mt19937& generator)
+    int num_reps,
+    std::mt19937 &generator)
 {
 
     std::vector<double> vec(num_elems);
@@ -227,7 +232,8 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
 
 void read_only_quick_median_regression_tests_and_performance_measurement::test_numerical_median_for_normal_distribution(
     size_t num_elems,
-    int num_reps, std::mt19937& generator)
+    int num_reps,
+    std::mt19937 &generator)
 {
 
     std::normal_distribution<> normal_distribution(42.0, sqrt(10.0));
@@ -353,9 +359,11 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
               << std::flush;
 }
 
-void read_only_quick_median_regression_tests_and_performance_measurement::test_numerical_median_for_exponential_distribution(
+void
+read_only_quick_median_regression_tests_and_performance_measurement::test_numerical_median_for_exponential_distribution(
     size_t num_elems,
-    int num_reps, std::mt19937& generator)
+    int num_reps,
+    std::mt19937 &generator)
 {
 
     std::exponential_distribution<> exponential_distribution(42.0);
@@ -481,7 +489,6 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
               << std::flush;
 }
 
-
 template <typename Iterator, typename PerformanceStats>
 typename std::iterator_traits<Iterator>::value_type
 read_only_quick_median_regression_tests_and_performance_measurement::tested_algorithm(
@@ -499,7 +506,9 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
         std::pair<Iterator, Iterator> median_pos_pair = read_only_quick_median_detail::read_only_quick_median_internal(
             begin, end, read_only_quick_median_detail::standard_pivoting_strategy(), performance_stats);
 
-        return (static_cast<double>(*std::get<0>(median_pos_pair)) + static_cast<double>(*std::get<1>(median_pos_pair))) / 2.0;
+        return (static_cast<double>(*std::get<0>(median_pos_pair)) +
+                static_cast<double>(*std::get<1>(median_pos_pair))) /
+               2.0;
     }
     else if (m_which_algorithm == 1)
     {
