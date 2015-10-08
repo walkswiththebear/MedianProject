@@ -71,7 +71,7 @@ double numerical_quick_median_for_uniform_distributions(RandomAccessIterator beg
  *
  */
 template <typename RandomAccessIterator>
-double numerical_quick_median_for_normal_distrubtions(RandomAccessIterator begin, RandomAccessIterator end)
+double numerical_quick_median_for_normal_distributions(RandomAccessIterator begin, RandomAccessIterator end)
 {
     no_op_median_performance_stats performance_stats;
     numerical_quick_median_detail::normal_distribution_pivot pivot_calculator;
@@ -87,7 +87,7 @@ double numerical_quick_median_for_normal_distrubtions(RandomAccessIterator begin
  *
  */
 template <typename RandomAccessIterator>
-double numerical_quick_median_for_exponential_distrubtions(RandomAccessIterator begin, RandomAccessIterator end)
+double numerical_quick_median_for_exponential_distributions(RandomAccessIterator begin, RandomAccessIterator end)
 {
     no_op_median_performance_stats performance_stats;
     numerical_quick_median_detail::exponential_distribution_pivot pivot_calculator;

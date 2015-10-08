@@ -10,55 +10,65 @@
 
 void read_only_quick_median_regression_tests_and_performance_measurement::run_tests()
 {
-    std::cout << "Testing top level algorithms\n";
-    std::cout << "============================\n\n";
-    test_top_level_algorithms();
-    /*
-        std::cout << "Testing numerical median for distributions\n";
-        std::cout << "==========================================\n\n";
-        test_numerical_median_for_distributions();
+       std::cout << "Testing top level algorithms\n";
+       std::cout << "============================\n\n";
+       test_top_level_algorithms();
 
-        std::cout << "Testing read_only_quick_median for (mostly) random access iterators\n";
-        std::cout << "===================================================================\n\n";
-        m_which_algorithm = 0;
-        test_algorithm();
+           std::cout << "Testing numerical median for distributions\n";
+           std::cout << "==========================================\n\n";
+           test_numerical_median_for_distributions();
 
-        std::cout << "\n";
-        std::cout << "Testing read_only_quick_median for bidirectional iterators\n";
-        std::cout << "==========================================================\n\n";
-        m_which_algorithm = 1;
-        test_algorithm();
+    std::cout << "Testing modifying numerical median for distributions\n";
+    std::cout << "====================================================\n\n";
+    test_modifying_numerical_median_for_distributions();
+    
+               std::cout << "Testing read_only_quick_median for (mostly) random access iterators\n";
+               std::cout << "===================================================================\n\n";
+               m_which_algorithm = 0;
+               test_algorithm();
 
-        std::cout << "\n";
-        std::cout << "Testing read_only_quick_median for forward iterators\n";
-        std::cout << "====================================================\n\n";
-        m_which_algorithm = 2;
-        test_algorithm();
+               std::cout << "\n";
+               std::cout << "Testing read_only_quick_median for bidirectional iterators\n";
+               std::cout << "==========================================================\n\n";
+               m_which_algorithm = 1;
+               test_algorithm();
 
-        std::cout << "\n";
-        std::cout << "Testing read_only_quick_median_random_data\n";
-        std::cout << "==========================================\n\n";
-        m_which_algorithm = 3;
-        test_algorithm();
+               std::cout << "\n";
+               std::cout << "Testing read_only_quick_median for forward iterators\n";
+               std::cout << "====================================================\n\n";
+               m_which_algorithm = 2;
+               test_algorithm();
 
-        std::cout << "\n";
-        std::cout << "Testing read_only_quick_median_random_data for bidirectional iterators\n";
-        std::cout << "======================================================================\n\n";
-        m_which_algorithm = 4;
-        test_algorithm();
+               std::cout << "\n";
+               std::cout << "Testing read_only_quick_median_random_data\n";
+               std::cout << "==========================================\n\n";
+               m_which_algorithm = 3;
+               test_algorithm();
 
-        std::cout << "\n";
-        std::cout << "Testing read_only_quick_median_random_data for forward iterators\n";
-        std::cout << "================================================================\n\n";
-        m_which_algorithm = 5;
-        test_algorithm();
+               std::cout << "\n";
+               std::cout << "Testing read_only_quick_median_random_data for bidirectional iterators\n";
+               std::cout << "======================================================================\n\n";
+               m_which_algorithm = 4;
+               test_algorithm();
 
-        std::cout << "\n";
-        std::cout << "Testing read_only_numerical_quick_median\n";
-        std::cout << "========================================\n\n";
-        m_which_algorithm = 6;
-        test_algorithm();
-    */
+               std::cout << "\n";
+               std::cout << "Testing read_only_quick_median_random_data for forward iterators\n";
+               std::cout << "================================================================\n\n";
+               m_which_algorithm = 5;
+               test_algorithm();
+
+               std::cout << "\n";
+               std::cout << "Testing read_only_numerical_quick_median\n";
+               std::cout << "========================================\n\n";
+               m_which_algorithm = 6;
+               test_algorithm();
+
+               std::cout << "\n";
+               std::cout << "Testing numerical_quick_median\n";
+               std::cout << "==============================\n\n";
+               m_which_algorithm = 10;
+               test_algorithm();
+    
     std::cout << m_check_true_count << " tests performed.\n";
 }
 
@@ -68,19 +78,19 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_t
 
     std::cout << "Testing read_only_quick_median...";
     std::pair<std::vector<double>::const_iterator, std::vector<double>::const_iterator> median_pair =
-        read_only_quick_median(vec.cbegin(), vec.cend());
+        read_only_quick_median(vec.begin(), vec.end());
     check_true(*median_pair.first == 4.0);
     check_true(*median_pair.second == 4.0);
     std::cout << "done.\n";
 
     std::cout << "Testing read_only_quick_median_random_data...";
-    median_pair = read_only_quick_median_random_data(vec.cbegin(), vec.cend());
+    median_pair = read_only_quick_median_random_data(vec.begin(), vec.end());
     check_true(*median_pair.first == 4.0);
     check_true(*median_pair.second == 4.0);
     std::cout << "done.\n";
 
     std::cout << "Testing read_only_numerical_quick_median...";
-    check_true(read_only_numerical_quick_median(vec.cbegin(), vec.cend()) == 4.0);
+    check_true(read_only_numerical_quick_median(vec.begin(), vec.end()) == 4.0);
     std::cout << "done.\n\n";
 
     std::cout << "Testing numerical_quick_median...";
@@ -128,7 +138,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -142,7 +152,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -156,7 +166,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -170,7 +180,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -185,7 +195,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -199,7 +209,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -213,7 +223,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -227,7 +237,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -257,7 +267,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -271,7 +281,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -285,7 +295,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -299,7 +309,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -314,7 +324,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -328,7 +338,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -342,7 +352,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -356,7 +366,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::test_n
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -387,7 +397,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -401,7 +411,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -415,7 +425,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -429,7 +439,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -444,7 +454,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -458,7 +468,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -472,7 +482,7 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -486,7 +496,47 @@ read_only_quick_median_regression_tests_and_performance_measurement::test_numeri
     for (int i = 0; i < num_reps; ++i)
     {
         // std::random_shuffle(vec.begin(), vec.end());
-        verify_median(vec.cbegin(), vec.cend(), stats);
+        verify_median(vec.begin(), vec.end(), stats);
+    }
+    std::cout << "    n=" << vec.size()
+              << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
+              << ", (average num comparisons)/nlog(n)=" << stats.get_comparison_count_average_to_NlogN_ratio() << "\n\n"
+              << std::flush;
+}
+
+void
+read_only_quick_median_regression_tests_and_performance_measurement::test_modifying_numerical_median_for_distributions()
+{
+    size_t num_elems = 10000000;
+    int num_reps = 30;
+    std::random_device random_device;
+    std::mt19937 generator(random_device());
+
+    std::normal_distribution<> normal_distribution(42.0, 10.0);
+
+    std::vector<double> vec(num_elems);
+    for (size_t i = 0; i < num_elems; ++i)
+    {
+        vec[i] = normal_distribution(generator);
+    }
+
+    m_which_algorithm = 10;
+    performance_stats stats;
+
+    std::cout << "Normally distributed data, pivot for uniform distribution.\n" << std::flush;
+    std::cout << "  " << vec.size() << " elements, " << num_reps << "  times.\n" << std::flush;
+    for (int i = 0; i < num_reps; ++i)
+    {
+        std::random_shuffle(vec.begin(), vec.end());
+        double my_median = numerical_quick_median_for_uniform_distributions(vec.begin(), vec.end());
+        std::vector<double>::iterator mid_pos = vec.begin() + (num_elems / 2 - 1);
+        std::nth_element(vec.begin(), mid_pos, vec.end());
+        double their_median_low = *mid_pos;
+        ++mid_pos;
+        std::nth_element(vec.begin(), mid_pos, vec.end());
+        double their_median_high = *mid_pos;
+        double their_median = their_median_low / 2.0 + their_median_high / 2.0;
+        check_true(my_median == their_median);
     }
     std::cout << "    n=" << vec.size()
               << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -590,6 +640,12 @@ read_only_quick_median_regression_tests_and_performance_measurement::tested_algo
         return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
             begin, end, pivot_calculator, performance_stats);
     }
+    else if (m_which_algorithm == 10)
+    {
+        numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
+        return numerical_quick_median_detail::numerical_quick_median_internal(
+            begin, end, pivot_calculator, performance_stats);
+    }
     else
     {
         check_true(false);
@@ -612,13 +668,13 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_wh
     no_op_median_performance_stats stats;
 
     // One element.
-    std::list<double> lis{ 1. };
+    std::vector<double> lis{ 1. };
     verify_median(lis.begin(), lis.end(), stats);
     // Be redundant to test verify_median.
     check_true(tested_algorithm(lis.begin(), lis.end(), stats) == 1.0);
 
     // One element an uneven number of times
-    lis = std::list<double>{ 1., 1., 1., 1., 1., 1., 1. };
+    lis = std::vector<double>{ 1., 1., 1., 1., 1., 1., 1. };
     verify_median(lis.begin(), lis.end(), stats);
     // Be redundant to test verify_median.
     check_true(tested_algorithm(lis.begin(), lis.end(), stats) == 1.0);
@@ -927,7 +983,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_no
     // Do it once for the sorted sequence, but let it not distort the
     // average complexity results.
     no_op_median_performance_stats unused_stats;
-    verify_median(sequence.cbegin(), sequence.cend(), unused_stats);
+    verify_median(sequence.begin(), sequence.end(), unused_stats);
     run_a_few_shuffles(sequence.begin(), sequence.end());
 
     // Fill vector with a "skewed uniform" distribution, shuffle,
@@ -951,7 +1007,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_no
         }
 
         std::random_shuffle(sequence.begin(), sequence.end());
-        verify_median(sequence.cbegin(), sequence.cend(), stats);
+        verify_median(sequence.begin(), sequence.end(), stats);
     }
 
     std::cout << "    n=" << len << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()
@@ -982,7 +1038,7 @@ void read_only_quick_median_regression_tests_and_performance_measurement::run_fi
             elem = uniform_distribution(generator);
         }
 
-        verify_median(sequence.cbegin(), sequence.cend(), stats);
+        verify_median(sequence.begin(), sequence.end(), stats);
     }
 
     std::cout << "    n=" << len << ", (average pivot count)/log(n)=" << stats.get_pivot_count_average_to_logN_ratio()

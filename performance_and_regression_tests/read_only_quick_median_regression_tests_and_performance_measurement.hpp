@@ -128,6 +128,9 @@ class read_only_quick_median_regression_tests_and_performance_measurement
     static void test_numerical_median_for_normal_distribution(size_t num_elems, int num_reps, std::mt19937 &generator);
     static void
     test_numerical_median_for_exponential_distribution(size_t num_elems, int num_reps, std::mt19937 &generator);
+    static void
+    test_modifying_numerical_median_for_distributions();
+
     static void test_algorithm();
     static void run_white_box_tests();
     template <typename Iterator> static void run_a_few_shuffles(Iterator begin, Iterator end);

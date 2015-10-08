@@ -93,7 +93,7 @@ template <typename Iterator> double read_only_numerical_quick_median_for_uniform
  * Iterators need to be forward or better.
  *
  */
-template <typename Iterator> double read_only_numerical_quick_median_for_normal_distrubtions(Iterator begin, Iterator end)
+template <typename Iterator> double read_only_numerical_quick_median_for_normal_distributions(Iterator begin, Iterator end)
 {
     no_op_median_performance_stats performance_stats;
     numerical_quick_median_detail::normal_distribution_pivot pivot_calculator;
@@ -110,7 +110,7 @@ template <typename Iterator> double read_only_numerical_quick_median_for_normal_
  * Iterators need to be forward or better.
  *
  */
-template <typename Iterator> double read_only_numerical_quick_median_for_exponential_distrubtions(Iterator begin, Iterator end)
+template <typename Iterator> double read_only_numerical_quick_median_for_exponential_distributions(Iterator begin, Iterator end)
 {
     no_op_median_performance_stats performance_stats;
     numerical_quick_median_detail::exponential_distribution_pivot pivot_calculator;
