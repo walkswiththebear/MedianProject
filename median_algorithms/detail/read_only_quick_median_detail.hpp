@@ -205,7 +205,7 @@ class standard_pivoting_strategy
                     (upper_bound_found && *pivot_position_locator_backward >= upper_bound))
                 {
                     performance_stats.add_comparisons(1);
-                    --pivot_position_locator_backward;
+                    ++pivot_position_locator_backward;
                 }
                 else
                 {
