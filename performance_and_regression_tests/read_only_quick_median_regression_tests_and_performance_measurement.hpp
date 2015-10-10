@@ -20,34 +20,16 @@ class read_only_quick_median_regression_tests_and_performance_measurement
 {
 
   public:
-    /*
-     * Tests the following algorithms:
-     *
-     * read_only_quick_median
-     * read_only_quick_median_random_data
-     * read_only_numerical_quick_median
-
-     * For each of these algorithms, the following tests are run:
-     *
-     * 1) A few white box tests. These calculates the median of hand-made
-     *    data that targets certain "critical" cases of the implementation.
-     *
-     * 2) A configurable number of black box tests. These calculate the median
-     *    of data that is generated with random number generator, both with and
-     *    without duplicates. The variables m_monte_carlo_count and
-     *    m_log10_of_size_of_largest_data_set configure the test. Please search
-     *    the code for these variables for details.
+    /**
+     * What this function does is subject to frequent additions and changes.
+     * The only more or less permanent part at this point is the function
+     * test_algorithm. See its description below.
      */
     static void run_tests();
 
   private:
     /**
       * Class for keeping track of performance
-      *
-      * NOTE: The methods that increment the counts are private. Therefore, the median
-      * helper functions that call these methods must be friends of this class. Hence
-      * the lengthy friend declarations here. This is of course not very important. It
-      * was more an experiment in friends and templates.
       */
 
     class performance_stats
@@ -113,24 +95,49 @@ class read_only_quick_median_regression_tests_and_performance_measurement
 
     /*
      * This function is called by the tests in lieu of the algorithm to be tested.
-     * The function branches to the currently to be tested algorithm by testing the
-     * member variable m_which_algorithm.
+     * The function branches to the currently to be tested algorithm by checking
+     * the member variable m_which_algorithm.
      */
     template <typename Iterator, typename PerformanceStats>
     static typename std::iterator_traits<Iterator>::value_type
     tested_algorithm(Iterator begin, Iterator end, PerformanceStats &performance_stats);
 
-    // Internal helper functions
-    //
+    /*
+     * Internal helper functions
+     */
+
+    // Fluid Part
+    // ==========
     static void test_top_level_algorithms();
     static void test_numerical_median_for_distributions();
     static void test_numerical_median_for_uniform_distribution(size_t num_elems, int num_reps, std::mt19937 &generator);
     static void test_numerical_median_for_normal_distribution(size_t num_elems, int num_reps, std::mt19937 &generator);
     static void
     test_numerical_median_for_exponential_distribution(size_t num_elems, int num_reps, std::mt19937 &generator);
-    static void
-    test_modifying_numerical_median_for_distributions();
+    static void test_modifying_numerical_median_for_distributions();
 
+
+    // Not So Fluid Part
+    // =================
+
+    /*
+     * Tests the following algorithms:
+     *
+     * read_only_quick_median
+     * read_only_quick_median_random_data
+     * read_only_numerical_quick_median
+
+     * For each of these algorithms, the following tests are run:
+     *
+     * 1) A few white box tests. These calculates the median of hand-made
+     *    data that targets certain "critical" cases of the implementation.
+     *
+     * 2) A configurable number of black box tests. These calculate the median
+     *    of data that is generated with random number generator, both with and
+     *    without duplicates. The variables m_monte_carlo_count and
+     *    m_log10_of_size_of_largest_data_set configure the test. Please search
+     *    the code for these variables for details.
+     */
     static void test_algorithm();
     static void run_white_box_tests();
     template <typename Iterator> static void run_a_few_shuffles(Iterator begin, Iterator end);

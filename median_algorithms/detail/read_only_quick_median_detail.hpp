@@ -7,7 +7,8 @@
 #define TMB_READ_ONLY_QUICK_MEDIAN_DETAIL_07_21_2015_HPP
 
 /*
- * Implementation details for read-only non-numerical quick median algorithm.
+ * Implementation details for read-only quick median algorithm. This algorithm
+ * is for all ordered sequences, including non-numerical data.
  */
 
 #include <tuple>

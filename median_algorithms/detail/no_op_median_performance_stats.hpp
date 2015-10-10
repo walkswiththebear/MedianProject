@@ -17,7 +17,7 @@ namespace median_project
 {
 
 /**
-* No-op performance stats class for median, to be used as the default in the algorithm.
+* No-op performance stats class for median, to be used as the default in the algorithms.
 */
 class no_op_median_performance_stats
 {
@@ -29,7 +29,7 @@ class no_op_median_performance_stats
      * NOTE: Strictly speaking, these methods should be private. But the friends thing
      * was really getting out of hand. Really.
      */
-     
+
   public:
     void set_sequence_length(int len)
     {

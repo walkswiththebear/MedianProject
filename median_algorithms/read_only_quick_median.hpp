@@ -32,7 +32,7 @@
  * not random access. The performance of the second version does not vary significantly
  * for different iterator categories.
  *
- * A brief description of the algorithm can be found at lines 372 - 489 of the implementation
+ * A brief description of the algorithm can be found at lines 401 - 417 of the implementation
  * file "read_only_quick_median_detail.hpp".
  */
 
@@ -65,7 +65,7 @@ template <typename Iterator> std::pair<Iterator, Iterator> read_only_quick_media
 
 /**
  * Function read_only_quick_median_random_data
- * =========================================================
+ * ===========================================
  *
  * Non-modifying median algorithm for non-numerical and numerical data in average
  * N * log(N) time. This version of the algorithm improves performance if the data is

@@ -10,65 +10,65 @@
 
 void read_only_quick_median_regression_tests_and_performance_measurement::run_tests()
 {
-       std::cout << "Testing top level algorithms\n";
-       std::cout << "============================\n\n";
-       test_top_level_algorithms();
+    std::cout << "Testing top level algorithms\n";
+    std::cout << "============================\n\n";
+    test_top_level_algorithms();
 
-           std::cout << "Testing numerical median for distributions\n";
-           std::cout << "==========================================\n\n";
-           test_numerical_median_for_distributions();
+    std::cout << "Testing numerical median for distributions\n";
+    std::cout << "==========================================\n\n";
+    test_numerical_median_for_distributions();
 
     std::cout << "Testing modifying numerical median for distributions\n";
     std::cout << "====================================================\n\n";
     test_modifying_numerical_median_for_distributions();
-    
-               std::cout << "Testing read_only_quick_median for (mostly) random access iterators\n";
-               std::cout << "===================================================================\n\n";
-               m_which_algorithm = 0;
-               test_algorithm();
 
-               std::cout << "\n";
-               std::cout << "Testing read_only_quick_median for bidirectional iterators\n";
-               std::cout << "==========================================================\n\n";
-               m_which_algorithm = 1;
-               test_algorithm();
+    std::cout << "Testing read_only_quick_median for (mostly) random access iterators\n";
+    std::cout << "===================================================================\n\n";
+    m_which_algorithm = 0;
+    test_algorithm();
 
-               std::cout << "\n";
-               std::cout << "Testing read_only_quick_median for forward iterators\n";
-               std::cout << "====================================================\n\n";
-               m_which_algorithm = 2;
-               test_algorithm();
+    std::cout << "\n";
+    std::cout << "Testing read_only_quick_median for bidirectional iterators\n";
+    std::cout << "==========================================================\n\n";
+    m_which_algorithm = 1;
+    test_algorithm();
 
-               std::cout << "\n";
-               std::cout << "Testing read_only_quick_median_random_data\n";
-               std::cout << "==========================================\n\n";
-               m_which_algorithm = 3;
-               test_algorithm();
+    std::cout << "\n";
+    std::cout << "Testing read_only_quick_median for forward iterators\n";
+    std::cout << "====================================================\n\n";
+    m_which_algorithm = 2;
+    test_algorithm();
 
-               std::cout << "\n";
-               std::cout << "Testing read_only_quick_median_random_data for bidirectional iterators\n";
-               std::cout << "======================================================================\n\n";
-               m_which_algorithm = 4;
-               test_algorithm();
+    std::cout << "\n";
+    std::cout << "Testing read_only_quick_median_random_data\n";
+    std::cout << "==========================================\n\n";
+    m_which_algorithm = 3;
+    test_algorithm();
 
-               std::cout << "\n";
-               std::cout << "Testing read_only_quick_median_random_data for forward iterators\n";
-               std::cout << "================================================================\n\n";
-               m_which_algorithm = 5;
-               test_algorithm();
+    std::cout << "\n";
+    std::cout << "Testing read_only_quick_median_random_data for bidirectional iterators\n";
+    std::cout << "======================================================================\n\n";
+    m_which_algorithm = 4;
+    test_algorithm();
 
-               std::cout << "\n";
-               std::cout << "Testing read_only_numerical_quick_median\n";
-               std::cout << "========================================\n\n";
-               m_which_algorithm = 6;
-               test_algorithm();
+    std::cout << "\n";
+    std::cout << "Testing read_only_quick_median_random_data for forward iterators\n";
+    std::cout << "================================================================\n\n";
+    m_which_algorithm = 5;
+    test_algorithm();
 
-               std::cout << "\n";
-               std::cout << "Testing numerical_quick_median\n";
-               std::cout << "==============================\n\n";
-               m_which_algorithm = 10;
-               test_algorithm();
-    
+    std::cout << "\n";
+    std::cout << "Testing read_only_numerical_quick_median\n";
+    std::cout << "========================================\n\n";
+    m_which_algorithm = 6;
+    test_algorithm();
+
+    std::cout << "\n";
+    std::cout << "Testing numerical_quick_median\n";
+    std::cout << "==============================\n\n";
+    m_which_algorithm = 10;
+    test_algorithm();
+
     std::cout << m_check_true_count << " tests performed.\n";
 }
 

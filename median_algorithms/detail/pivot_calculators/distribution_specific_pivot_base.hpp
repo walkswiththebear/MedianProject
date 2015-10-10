@@ -6,7 +6,6 @@
 #ifndef TMB_DISTRIBUTION_SPECIFIC_PIVOT_BASE_10_03_2015_HPP
 #define TMB_DISTRIBUTION_SPECIFIC_PIVOT_BASE_10_03_2015_HPP
 
-#include <boost/math/special_functions/erf.hpp>
 #include "pivot_functor_base.hpp"
 
 /*
@@ -32,13 +31,12 @@ class distribution_specific_pivot_base : public pivot_functor_base
         double size_of_interval_of_median_candidates =
             static_cast<double>(m_total_sequence_length - num_elements_less_than_median_lower_bound -
                                 num_elements_greater_than_median_upper_bound);
-                                
+
         double num_desired_elements_less_than_or_equal_to_pivot =
             static_cast<double>(m_total_sequence_length) / 2.0 -
             static_cast<double>(num_elements_less_than_median_lower_bound);
-            
-        double lambda = num_desired_elements_less_than_or_equal_to_pivot /
-                        size_of_interval_of_median_candidates;
+
+        double lambda = num_desired_elements_less_than_or_equal_to_pivot / size_of_interval_of_median_candidates;
 
         double pivot = quantile((1.0 - lambda) * cdf(median_lower_bound) + lambda * cdf(median_upper_bound));
         return std::min(median_upper_bound, std::max(pivot, median_lower_bound));

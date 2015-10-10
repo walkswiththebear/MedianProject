@@ -18,8 +18,13 @@ namespace numerical_quick_median_detail
 {
 
 /**
- * Numeric pivot for the case of unknown distributions: use the midpoint of the 
+ * Numeric pivot for the case of unknown distributions: use the midpoint of the
  * interval of pivot candidates.
+ *
+ * NOTE: This is the pivoting strategy that is used in Torben Morgenson's original
+ * algorithm. So far, empirical evidence suggests, rather plausibly, that the
+ * pivoting strategy for uniform distributions is the better choice for the default
+ * strategy.
  */
 class standard_numerical_pivot : public pivot_functor_base
 {

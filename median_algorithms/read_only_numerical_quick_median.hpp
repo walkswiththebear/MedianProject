@@ -20,21 +20,17 @@
  * that is, the next element to be considered as a median candidate, from the current
  * lower and upper bound for the median. This means that whether or not the worst case
  * performance is hit does not depend on the ordering of the elements in the sequence,
- * but on their numerical distribution. This can be advantageous, mostly so when it is
- * known that the distribution is uniform. It can also be treacherous: the worst case
- * or near worst case happens when the distribution is rather one-sided, e.g., it is
- * exponential. This means that hitting the worst case performance is not per se
- * unlikely, as it is with the random pivot choice. Therefore, using this algorithm
- * requires discretion in the sense that one must have knowledge or make conjectures
- * about the distribution of the elements of the sequence.
- *
+ * but on their numerical distribution. This can be advantageous when it is known with
+ * some certainty what the distribution of the data is. Even if nothing is known about
+ * the distribution of the data, using the pivoting stategy for uniformly distributed
+ * data will often achieve a performance improvement over non-numerical pivoting.
  *
  * Arguments are begin and end iterators to the data. These do not  have to be better
  * than forward iterators. The return value is a double. For an uneven
  * number of elements, it is the median converted to a double. For an even number of
  * elements, it is the mean of the left and right endpoint of the median interval.
  *
- * A brief description of the algorithm can be found at lines 195 - 219 of the implementation
+ * A brief description of the algorithm can be found at lines 187 - 207 of the implementation
  * file "read_only_numerical_quick_median_detail.hpp".
  */
 
@@ -53,8 +49,7 @@ namespace median_project
  * =========================================
  *
  * Non-modifying median algorithm for numerical data. Use this algorithm when there is no
- * information or conjecture regarding the distribution of the data. This algorithm will
- * experience the worst case performance (O(n^2)) for the sequence \{2^(-i)\}_{i\in N).
+ * information or conjecture regarding the distribution of the data.
  * 
  * Iterators need to be forward or better.
  *
@@ -62,7 +57,7 @@ namespace median_project
 template <typename Iterator> double read_only_numerical_quick_median(Iterator begin, Iterator end)
 {
     no_op_median_performance_stats performance_stats;
-    numerical_quick_median_detail::standard_numerical_pivot pivot_calculator;
+    numerical_quick_median_detail::uniform_distribution_pivot pivot_calculator;
     return read_only_numerical_quick_median_detail::read_only_numerical_quick_median_internal(
         begin, end, pivot_calculator, performance_stats);
 }

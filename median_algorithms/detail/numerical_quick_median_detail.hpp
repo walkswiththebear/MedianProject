@@ -34,6 +34,13 @@ inline double mean(double x, double y)
 
 /**
 * The function numerical_quick_median forwards to this "internal" function.
+ *
+ * NOTE: The current version of this algorithm runs three times as long as
+ * std::nth_element. At this point, it is not clear if this is mostly due
+ * to the overhead introduced by numerical pivoting, or by other optimizations
+ * of std::nth_element. There is a possibility that we can graft numerical
+ * pivoting onto std::nth_element, preserving all other optimizations, and
+ * achieve an improvement. Stay tuned.
 */
 template <typename RandomAccessIterator, typename PivotCalculator, typename PerformanceStats>
 double numerical_quick_median_internal(RandomAccessIterator begin,
